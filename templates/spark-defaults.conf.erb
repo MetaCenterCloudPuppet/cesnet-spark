@@ -1,0 +1,11 @@
+<% if @hdfs_hostname -%>
+spark.eventLog.enabled=true
+spark.eventLog.dir=hdfs://<%= @hdfs_hostname -%>/user/spark/applicationHistory
+<% if @jar_enable -%>
+spark.yarn.jar=hdfs://<%= @hdfs_hostname -%>/user/spark/share/lib/spark-assembly.jar
+<% end -%>
+<% end -%>
+<% if @history_hostname -%>
+spark.yarn.historyServer.address=http://<%= @spark_history_hostname -%>:18082
+spark.history.ui.port=18082
+<%end -%>

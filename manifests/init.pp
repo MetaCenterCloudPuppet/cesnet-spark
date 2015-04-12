@@ -1,21 +1,38 @@
 # == Class: spark
 #
-# Full description of class spark here.
+# Main configure class for CESNET Apache Spark puppet module.
 #
 # === Parameters
 #
-# [*sample_parameter*]
-#   Explanation of what this parameter affects and what it defaults to.
+# ####`alternatives` (see params.pp)
+#
+# Use alternatives to switch configuration. Use it only when supported (like with Cloudera).
+#
+# ####`hdfs_hostname` undef
+#
+# HDFS hostname or defaultFS (for example: host:8020, haName, ...).
+#
+# ####`history_hostname` undef
+#
+# TODO: not implemented yet Spark History server hostname.
+#
+# ####`jar_enable` false
+#
+# Configure Apache Spark to search Spark jar file in *$hdfs\_hostname/user/spark/share/lib/spark-assembly.jar*. The jar needs to be copied to HDFS manually, or also manually updated after each Spark SW update.
 #
 class spark (
-  $package_name = $::spark::params::package_name,
-  $service_name = $::spark::params::service_name,
+  $alternatives = $params::alternatives,
+  $hdfs_hostname = undef,
+  $history_hostname = undef,
+  $jar_enable = false,
 ) inherits ::spark::params {
+  include stdlib
 
-  # validate parameters here
-
-  class { '::spark::install': } ->
-  class { '::spark::config': } ~>
-  class { '::spark::service': } ->
-  Class['::spark']
+  if $alternatives {
+    validate_string($alternatives)
+  }
+  validate_bool($jar_enable)
+  if $jar_enable and !$hdfs_hostname {
+    warn('$hdfs_hostname parameter needed, when remote copied jar enabled')
+  }
 }

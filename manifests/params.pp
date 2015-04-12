@@ -6,15 +6,22 @@
 class spark::params {
   case $::osfamily {
     'Debian': {
-      $package_name = 'spark'
-      $service_name = 'spark'
+      $alternatives = 'cluster'
+      $confdir = '/etc/spark/conf'
+      $packages = {
+        frontend => 'spark-python'
+      }
     }
-    'RedHat', 'Amazon': {
-      $package_name = 'spark'
-      $service_name = 'spark'
+    'RedHat': {
+      $alternatives = undef
+      $confdir = '/etc/spark'
+      $packages = {
+        frontend => 'spark'
+      }
     }
     default: {
       fail("${::operatingsystem} not supported")
     }
   }
+
 }
