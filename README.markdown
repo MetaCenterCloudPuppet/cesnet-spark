@@ -26,7 +26,6 @@ TODO: Standalone Apache Spark cluster not supported yet (there is missing master
 
 Supported are:
 
-* Fedora 21 (TODO: test)
 * Debian 7/wheezy: Cloudera distribution (tested with Hadoop 2.5.0)
 * Ubuntu 14/trusty: Cloudera distribution (tested with Hadoop 2.5.0)
 
@@ -56,7 +55,7 @@ There are several known or intended limitations in this module.
 Be aware of:
 
 * **Hadoop repositories**
- * neither Cloudera nor Hortonworks repositories are configured in this module (for Cloudera you can find list and key files here: [http://archive.cloudera.com/cdh5/debian/wheezy/amd64/cdh/](http://archive.cloudera.com/cdh5/debian/wheezy/amd64/cdh/), Fedora has Spark as part of distribution, ...)
+ * neither Cloudera nor Hortonworks repositories are configured in this module (for Cloudera you can find list and key files here: [http://archive.cloudera.com/cdh5/debian/wheezy/amd64/cdh/](http://archive.cloudera.com/cdh5/debian/wheezy/amd64/cdh/))
  * *java* is not installed by this module (*openjdk-7-jre-headless* is OK for Debian 7/wheezy)
 
 * **No inter-node dependencies**: working HDFS namenode is required before deploing of Spark: set dependency of *spark::hdfs* on *hadoop::namenode::service* on the HDFS namenode
