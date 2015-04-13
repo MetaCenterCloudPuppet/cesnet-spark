@@ -6,6 +6,9 @@
     * [What spark affects](#what-spark-affects)
     * [Setup requirements](#setup-requirements)
 4. [Usage - Configuration options and additional functionality](#usage)
+    * [Spark in YARN cluster mode](#usage-yarn)
+    * [Spark jar file optimization](#usage-jar-optimization)
+    * [Add Spark History Server](#usage-history-server)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
     * [Classes](#classes)
     * [Module Parameters](#parameters)
@@ -20,9 +23,9 @@ Puppet module for deployment of Apache Spark.
 <a name="module-description"></a>
 ## Module Description
 
-This puppet module installs and setup Apache Spark cluster.
+This puppet module installs and setup Apache Spark cluster, optionally with security.
 
-TODO: Standalone Apache Spark cluster not supported yet (there is missing master and history server here), only client is supported. But YARN mode is working, so full cluster submit (to Hadoop) is OK.
+The standalone Apache Spark cluster is not supported yet (there are missing master and worker daemons here), only client is supported. But the YARN mode is working, so the full cluster submit (to Hadoop) is possible.
 
 Supported are:
 
@@ -35,17 +38,21 @@ Supported are:
 <a name="what-spark-affects"></a>
 ### What spark affects
 
-* Packages: installs Spark packages (core, python for frontend, ...)
+* Packages: installs Spark packages as needed (core, python, history server, ...)
 * Files modified:
- * */etc/spark/spark-default.conf* (*/etc/spark/conf/spark-default.conf* on Debian)
+ * */etc/spark/conf/spark-default.conf*
+ *  */etc/default/spark*
  * */etc/profile.d/hadoop-spark.csh* (frontend)
  * */etc/profile.d/hadoop-spark.sh* (frontend)
+* Permissions modified:
+ * */etc/security/keytab/spark.service.keytab* (historyserver)
 * Alternatives:
  * alternatives are used for */etc/spark/conf* in Cloudera
  * this module switches to the new alternative by default, so the Cloudera original configuration can be kept intact
-* Services: TODO
+* Services:
+ * history server (when *spark::historyserver* or *spark::historyserver::service* included)
 * Helper files:
- * */var/lib/hadoop-hdfs/.puppet-spark-dir-created*
+ * */var/lib/hadoop-hdfs/.puppet-spark-\**
 
 <a name="setup-requirements"></a>
 ### Setup Requirements
@@ -58,11 +65,12 @@ Be aware of:
  * neither Cloudera nor Hortonworks repositories are configured in this module (for Cloudera you can find list and key files here: [http://archive.cloudera.com/cdh5/debian/wheezy/amd64/cdh/](http://archive.cloudera.com/cdh5/debian/wheezy/amd64/cdh/))
  * *java* is not installed by this module (*openjdk-7-jre-headless* is OK for Debian 7/wheezy)
 
-* **No inter-node dependencies**: working HDFS namenode is required before deploing of Spark: set dependency of *spark::hdfs* on *hadoop::namenode::service* on the HDFS namenode
+* **No inter-node dependencies**: working HDFS is required before deploying of Spark History Server, dependency of Spark HDFS initialization on HDFS namenode is handled properly (if the class *spark::hdfs* is included on the HDF namenode, see example)
 
 <a name="usage"></a>
 ## Usage
 
+<a name="usage-yarn"></a>
 ### Spark in YARN cluster mode
 
 Example of Apache Spark over Hadoop cluster. For simplicity one-machine Hadoop cluster is used (everything is on *$::fqdn*, replication factor 1).
@@ -93,17 +101,15 @@ Example of Apache Spark over Hadoop cluster. For simplicity one-machine Hadoop c
       include hadoop::frontend
 
       include spark::frontend
+      # should be collocated with hadoop::namenode
       include spark::hdfs
-
-      Class['hadoop::namenode::service'] -> Class['spark::hdfs']
     }
-
-Notice the *spark::hdfs**, which needs to be launched on the HDFS namenode and the dependency on *hadoop::namenode::service*.
 
 Now you can submit spark jobs in the cluster mode:
 
     spark-submit --class org.apache.spark.examples.SparkPi --deploy-mode cluster --master yarn /usr/lib/spark/lib/spark-examples-1.2.0-cdh5.3.1-hadoop2.5.0-cdh5.3.1.jar 10
 
+<a name="usage-jar-optimization"></a>
 ### Spark jar file optimization
 
 The *spark-assembly.jar* file is copied into HDFS on each job submit. It is possible to optimize this by copying it manually. Keep in mind the jar file needs to be refreshed on HDFS with each Spark SW update.
@@ -121,6 +127,22 @@ Copy the jar file after installation and deployment (superuser credentials are n
 
     hdfs dfs -put /usr/lib/spark/spark-assembly.jar /user/spark/share/lib/spark-assembly.jar
 
+<a name="usage-history-server"></a>
+### Add Spark History Server
+
+Spark History server stores details about Spark jobs. It is provided by the class *spark::historyserver*. The parameter *historiserver\_hostname* needs to be also specified (replace *$::fqdn* by real hostname):
+
+    ...
+    class{'spark':
+      ...
+      historyserver_hostname => $::fqdn,
+    }
+
+    node default {
+      ...
+      include spark::historyserver
+    }
+
 <a name="reference"></a>
 ##Reference
 
@@ -135,6 +157,10 @@ Copy the jar file after installation and deployment (superuser credentials are n
  * install
 * init
 * **hdfs** - HDFS initializations
+* **historyserver** - History Server
+ * config
+ * install
+ * service
 * params
 
 <a name="parameters"></a>
@@ -148,9 +174,9 @@ Use alternatives to switch configuration. Use it only when supported (like with 
 
 HDFS hostname or defaultFS (for example: host:8020, haName, ...).
 
-####`history_hostname` undef
+####`historyserver_hostname` undef
 
-TODO: not implemented yet Spark History server hostname.
+Spark History server hostname.
 
 ####`jar_enable` false
 
@@ -165,7 +191,12 @@ Enable YARN mode by default. This requires configured Hadoop using CESNET Hadoop
 <a name="limitations"></a>
 ## Limitations
 
-This is where you list OS compatibility, version compatibility, etc.
+Spark standalone cluster not supported (missing support master and worker daemons). But the YARN mode is working, so the full cluster submit (to Hadoop) is possible.
+
+And Puppet 3.x and Ruby >= 1.9.x is required, thus following systems are not supported:
+
+* RedHat/CentOS 6 and older
+* Ubuntu 12/precise and older
 
 <a name="development"></a>
 ## Development

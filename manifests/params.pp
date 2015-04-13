@@ -8,13 +8,20 @@ class spark::params {
     'Debian': {
       $alternatives = 'cluster'
       $confdir = '/etc/spark/conf'
+      $daemons = {
+        historyserver  => 'spark-history-server',
+      }
+      $defaultdir = '/etc/default'
       $packages = {
-        frontend => 'spark-python'
+        common         => 'spark-core',
+        frontend       => 'spark-python',
+        historyserver  => 'spark-history-server',
       }
     }
     'RedHat': {
       $alternatives = undef
       $confdir = '/etc/spark'
+      $defaultdir = '/etc/sysconfig'
       $packages = {
         frontend => 'spark'
       }
@@ -24,4 +31,5 @@ class spark::params {
     }
   }
 
+  $keytab_historyserver = '/etc/security/keytab/spark.service.keytab'
 }

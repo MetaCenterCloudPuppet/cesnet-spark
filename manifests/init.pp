@@ -12,9 +12,17 @@
 #
 # HDFS hostname or defaultFS (for example: host:8020, haName, ...).
 #
-# ####`history_hostname` undef
+# ####`historyserver_hostname` undef
 #
-# TODO: not implemented yet Spark History server hostname.
+# Spark History server hostname.
+#
+# #### `properties` undef
+#
+# Spark properties to set.
+#
+# ####`realm` undef
+#
+# Kerberos realm. Non-empty string enables security.
 #
 # ####`jar_enable` false
 #
@@ -29,7 +37,9 @@
 class spark (
   $alternatives = $params::alternatives,
   $hdfs_hostname = undef,
-  $history_hostname = undef,
+  $historyserver_hostname = undef,
+  $properties = undef,
+  $realm = undef,
   $jar_enable = false,
   $yarn_enable = true,
 ) inherits ::spark::params {
@@ -42,4 +52,27 @@ class spark (
   if $jar_enable and !$hdfs_hostname {
     warn('$hdfs_hostname parameter needed, when remote copied jar enabled')
   }
+
+  if $historyserver_hostname {
+    $hs_properties = {
+      # must be with 'http://' to proper redirection from Hadoop with security
+      'spark.yarn.historyServer.address' => "http://${historyserver_hostname}:18080"
+    }
+  }
+  if $historyserver_hostname == $::fqdn {
+    $hs_daemon_properties = {
+      'spark.history.ui.port' => 18080,
+    }
+  }
+  if $realm {
+    if $historyserver_hostname == $::fqdn {
+      $security_properties = {
+        'spark.history.kerberos.enabled' => 'true',
+        'spark.history.kerberos.keytab' => '/etc/security/keytab/spark.service.keytab',
+        'spark.history.kerberos.principal' => "spark/${::fqdn}@${realm}",
+      }
+    }
+  }
+
+  $_properties = merge($hs_properties, $hs_daemon_properties, $security_properties, $properties)
 }

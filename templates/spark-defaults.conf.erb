@@ -8,7 +8,7 @@ spark.yarn.jar=hdfs://<%= @hdfs_hostname -%>/user/spark/share/lib/spark-assembly
 spark.master=yarn
 <% end -%>
 <% end -%>
-<% if @history_hostname -%>
-spark.yarn.historyServer.address=http://<%= @spark_history_hostname -%>:18082
-spark.history.ui.port=18082
-<%end -%>
+<% properties = scope.lookupvar('spark::_properties').select { |name,value| not (name =~ /^spark\.history\./) and value != '::undef' } -%>
+<% properties.keys.each do |p| -%>
+<%= p -%>=<%= scope.lookupvar('spark::_properties')[p] %>
+<% end -%>

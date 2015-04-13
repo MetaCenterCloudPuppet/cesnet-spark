@@ -2,9 +2,45 @@
 #
 # HDFS initialiations. Actions necessary to launch on HDFS namenode: Creates directory structure on HDFS for Spark. It needs to be called after Hadoop HDFS Namenode is working.
 #
-# This class is needed to be launched on HDFS namenode. With some limitations it can be launched on any Hadoop node (user hive created or hive installed on namenode, kerberos ticket available on the local node).
+# This class is needed to be launched on HDFS namenode. With some limitations it can be launched on any Hadoop node (kerberos ticket available on the local node).
 #
 class spark::hdfs {
+  # create user/group if needed (we don't need to install spark just for user, unless it is colocated with the namenode)
+  group { 'spark':
+    ensure => present,
+    system => true,
+  }
+  case $::osfamily {
+    'RedHat': {
+      user { 'spark':
+        ensure     => present,
+        system     => true,
+        comment    => 'Apache Spark',
+        gid        => 'spark',
+        home       => '/var/lib/spark',
+        managehome => true,
+        password   => '!!',
+        shell      => '/sbin/nologin',
+      }
+    }
+    'Debian': {
+      user { 'spark':
+        ensure     => present,
+        system     => true,
+        comment    => 'Spark User',
+        gid        => 'spark',
+        home       => '/var/lib/spark',
+        managehome => true,
+        password   => '!!',
+        shell      => '/bin/false',
+      }
+    }
+    default: {
+      notice("${::osfamily} not supported")
+    }
+  }
+  Group['spark'] -> User['spark']
+
   $touchfile = 'spark-root-dir-created'
   hadoop::kinit {'spark-kinit':
     touchfile => $touchfile,
