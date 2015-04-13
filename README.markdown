@@ -139,6 +139,10 @@ TODO: not implemented yet Spark History server hostname.
 
 Configure Apache Spark to search Spark jar file in *$hdfs\_hostname/user/spark/share/lib/spark-assembly.jar*. The jar needs to be copied to HDFS manually, or also manually updated after each Spark SW update.
 
+####`yarn_enable` true
+
+Enable YARN mode by default. This requires configured Hadoop using CESNET Hadoop puppet module.
+
 <a name="limitations"></a>
 ## Limitations
 

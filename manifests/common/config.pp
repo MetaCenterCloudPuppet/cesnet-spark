@@ -6,6 +6,7 @@ class spark::common::config {
   $hdfs_hostname = $spark::hdfs_hostname
   $jar_enable = $spark::jar_enable
   $history_hostname = $spark::history_hostname
+  $yarn_enable = $spark::yarn_enable
   file{"${spark::confdir}/spark-defaults.conf":
     owner   => 'root',
     group   => 'root',

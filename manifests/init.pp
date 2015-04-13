@@ -20,11 +20,16 @@
 #
 # Configure Apache Spark to search Spark jar file in *$hdfs\_hostname/user/spark/share/lib/spark-assembly.jar*. The jar needs to be copied to HDFS manually, or also manually updated after each Spark SW update.
 #
+# ####`yarn_enable` true
+#
+# Enable YARN mode by default. This requires configured Hadoop using CESNET Hadoop puppet module.
+#
 class spark (
   $alternatives = $params::alternatives,
   $hdfs_hostname = undef,
   $history_hostname = undef,
   $jar_enable = false,
+  $yarn_enable = true,
 ) inherits ::spark::params {
   include stdlib
 

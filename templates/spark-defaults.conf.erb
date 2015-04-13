@@ -4,6 +4,9 @@ spark.eventLog.dir=hdfs://<%= @hdfs_hostname -%>/user/spark/applicationHistory
 <% if @jar_enable -%>
 spark.yarn.jar=hdfs://<%= @hdfs_hostname -%>/user/spark/share/lib/spark-assembly.jar
 <% end -%>
+<% if @yarn_enable -%>
+spark.master=yarn
+<% end -%>
 <% end -%>
 <% if @history_hostname -%>
 spark.yarn.historyServer.address=http://<%= @spark_history_hostname -%>:18082

@@ -3,10 +3,13 @@
 # This class is called from spark::frontend.
 #
 class spark::frontend::config {
-  include hadoop::common::config
-  include hadoop::common::hdfs::config
-  include hadoop::common::yarn::config
   include spark::common::config
+
+  if $spark::yarn_enable {
+    include hadoop::common::config
+    include hadoop::common::hdfs::config
+    include hadoop::common::yarn::config
+  }
 
   $hadoop_confdir = $hadoop::confdir
   file {'/etc/profile.d/hadoop-spark.sh':
