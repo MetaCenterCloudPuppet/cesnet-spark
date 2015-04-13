@@ -104,6 +104,23 @@ Now you can submit spark jobs in the cluster mode:
 
     spark-submit --class org.apache.spark.examples.SparkPi --deploy-mode cluster --master yarn /usr/lib/spark/lib/spark-examples-1.2.0-cdh5.3.1-hadoop2.5.0-cdh5.3.1.jar 10
 
+### Spark jar file optimization
+
+The *spark-assembly.jar* file is copied into HDFS on each job submit. It is possible to optimize this by copying it manually. Keep in mind the jar file needs to be refreshed on HDFS with each Spark SW update.
+
+    ...
+
+    class{'spark':
+      hdfs_hostname => $::fqdn,
+      jar_enable    => true,
+    }
+
+    ...
+
+Copy the jar file after installation and deployment (superuser credentials are needed if security in Hadoop is enabled):
+
+    hdfs dfs -put /usr/lib/spark/spark-assembly.jar /user/spark/share/lib/spark-assembly.jar
+
 <a name="reference"></a>
 ##Reference
 
@@ -137,7 +154,9 @@ TODO: not implemented yet Spark History server hostname.
 
 ####`jar_enable` false
 
-Configure Apache Spark to search Spark jar file in *$hdfs\_hostname/user/spark/share/lib/spark-assembly.jar*. The jar needs to be copied to HDFS manually, or also manually updated after each Spark SW update.
+Configure Apache Spark to search Spark jar file in *$hdfs\_hostname/user/spark/share/lib/spark-assembly.jar*. The jar needs to be copied to HDFS manually after installation, and also manually updated after each Spark SW update:
+
+    hdfs dfs -put /usr/lib/spark/spark-assembly.jar /user/spark/share/lib/spark-assembly.jar
 
 ####`yarn_enable` true
 
