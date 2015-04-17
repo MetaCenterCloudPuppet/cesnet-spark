@@ -67,7 +67,7 @@ class spark (
   if $realm {
     if $historyserver_hostname == $::fqdn {
       $security_properties = {
-        'spark.history.kerberos.enabled' => 'true',
+        'spark.history.kerberos.enabled' => true,
         'spark.history.kerberos.keytab' => '/etc/security/keytab/spark.service.keytab',
         'spark.history.kerberos.principal' => "spark/${::fqdn}@${realm}",
       }

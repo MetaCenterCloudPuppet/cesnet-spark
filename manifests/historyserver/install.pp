@@ -11,7 +11,7 @@ class spark::historyserver::install {
     'debian': {
       exec {'debian-fuckup':
         command => 'touch /etc/init.d/spark-history-server && chmod +x /etc/init.d/spark-history-server',
-        path    => $path,
+        path    => $::path,
         creates => '/etc/init.d/spark-history-server',
       }
       ->
@@ -20,9 +20,9 @@ class spark::historyserver::install {
       }
       ->
       exec{'debian-restore-fuckup':
-        command  => 'mv -v /etc/init.d/spark-history-server.dpkg-dist /etc/init.d/spark-history-server',
-        path     => $path,
-        onlyif   => 'test -f /etc/init.d/spark-history-server.dpkg-dist',
+        command => 'mv -v /etc/init.d/spark-history-server.dpkg-dist /etc/init.d/spark-history-server',
+        path    => $::path,
+        onlyif  => 'test -f /etc/init.d/spark-history-server.dpkg-dist',
       }
     }
     default: {
