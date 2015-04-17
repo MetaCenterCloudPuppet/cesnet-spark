@@ -4,7 +4,9 @@
 #
 class spark::historyserver::config {
   include stdlib
-  include spark::common::config
+  contain hadoop::common::config
+  contain hadoop::common::hdfs::config
+  contain spark::common::config
 
   validate_string($spark::historyserver_hostname)
 

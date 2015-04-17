@@ -105,6 +105,15 @@ Example of Apache Spark over Hadoop cluster. For simplicity one-machine Hadoop c
       include spark::hdfs
     }
 
+Issues:
+
+* if collocated with HDFS namenode, add dependency *Class['hadoop::namenode::service'] -> Class['spark::historyserver::service']*
+* if not collocated, it is needed to have HDFS namenode running first (puppet should be launched later again, if Spark History Server won't start because of HDFS)
+
+Notes:
+
+* for Spark clients: user must logout and login again or launch "*. /etc/profile.d/hadoop-spark.sh*"
+
 Now you can submit spark jobs in the cluster mode:
 
     spark-submit --class org.apache.spark.examples.SparkPi --deploy-mode cluster --master yarn /usr/lib/spark/lib/spark-examples-1.2.0-cdh5.3.1-hadoop2.5.0-cdh5.3.1.jar 10

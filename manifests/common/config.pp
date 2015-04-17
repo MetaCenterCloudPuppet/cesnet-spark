@@ -18,6 +18,7 @@ class spark::common::config {
     mode    => '0644',
     content => template('spark/spark-defaults.conf.erb'),
     alias   => 'spark-defaults.conf',
+    require => Package[$spark::packages['common']],
   }
 
   file{"${spark::defaultdir}/spark":
@@ -26,5 +27,6 @@ class spark::common::config {
     mode    => '0644',
     content => template('spark/env.erb'),
     alias   => 'spark-env',
+    require => Package[$spark::packages['common']],
   }
 }
