@@ -29,4 +29,15 @@ class spark::common::config {
     alias   => 'spark-env',
     require => Package[$spark::packages['common']],
   }
+
+  $confdir = $spark::confdir
+  $environments = $spark::environments
+  if $environments {
+    augeas{"${confdir}/spark-env.sh":
+      lens    => 'Shellvars.lns',
+      incl    => "${confdir}/spark-env.sh",
+      changes => template('spark/spark-env.sh.augeas.erb'),
+    }
+  }
+
 }

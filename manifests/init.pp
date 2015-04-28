@@ -16,6 +16,16 @@
 #
 # Spark History server hostname.
 #
+# ####`environments` undef
+#
+# Environments to set for Apache Spark. "::undef" will unset the variable.
+#
+# You may need to increase memory in case of big amount of jobs:
+#
+#     environments => {
+#       'SPARK_DAEMON_MEMORY' => '4096m',
+#     }
+#
 # #### `properties` undef
 #
 # Spark properties to set.
@@ -38,6 +48,7 @@ class spark (
   $alternatives = $params::alternatives,
   $hdfs_hostname = undef,
   $historyserver_hostname = undef,
+  $environments = undef,
   $properties = undef,
   $realm = undef,
   $jar_enable = false,
