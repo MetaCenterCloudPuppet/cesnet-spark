@@ -1,12 +1,23 @@
 {
   "name": "cesnet-spark",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": "cesnet",
   "summary": "Apache Spark",
   "license": "MIT",
   "source": "https://github.com/MetaCenterCloudPuppet/cesnet-spark",
   "project_page": "https://github.com/MetaCenterCloudPuppet/cesnet-spark",
   "issues_url": "https://github.com/MetaCenterCloudPuppet/cesnet-spark/issues",
+  "tags": ["hadoop", "spark"],
+  "requirements": [
+    {
+      "name": "pe",
+      "version_requirement": "3.x"
+    },
+    {
+      "name": "puppet",
+      "version_requirement": "3.x"
+    }
+  ],
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
