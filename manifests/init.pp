@@ -75,7 +75,7 @@ class spark (
       'spark.history.ui.port' => 18080,
     }
   }
-  if $realm {
+  if $realm and $realm != '' {
     if $historyserver_hostname == $::fqdn {
       $security_properties = {
         'spark.history.kerberos.enabled' => true,
