@@ -11,7 +11,7 @@ class spark::historyserver::config {
   validate_string($spark::historyserver_hostname)
 
   $keytab = $spark::keytab_historyserver
-  if $spark::realm and $spark:realm != '' {
+  if $spark::realm and $spark::realm != '' {
     file { $keytab:
       owner => 'spark',
       group => 'spark',
