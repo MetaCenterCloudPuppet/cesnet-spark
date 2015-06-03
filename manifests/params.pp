@@ -4,28 +4,24 @@
 # It sets variables according to platform.
 #
 class spark::params {
-  case $::osfamily {
-    'Debian': {
-      $confdir = '/etc/spark/conf'
+  case "${::osfamily}-${::operatingsystem}" {
+    /RedHat-Fedora/: {
+      $packages = {
+        frontend => 'spark'
+      }
+    }
+    /Debian|RedHat/: {
       $daemons = {
         historyserver  => 'spark-history-server',
       }
-      $defaultdir = '/etc/default'
       $packages = {
         common         => 'spark-core',
         frontend       => 'spark-python',
         historyserver  => 'spark-history-server',
       }
     }
-    'RedHat': {
-      $confdir = '/etc/spark'
-      $defaultdir = '/etc/sysconfig'
-      $packages = {
-        frontend => 'spark'
-      }
-    }
     default: {
-      fail("${::operatingsystem} not supported")
+      fail("${::operatingsystem} (${::osfamily}) not supported")
     }
   }
 
@@ -34,6 +30,16 @@ class spark::params {
     # https://github.com/puppet-community/puppet-alternatives/issues/18
     /RedHat/        => '',
     /Debian/        => 'cluster',
+  }
+
+  $confdir = "${::osfamily}-${::operatingsystem}" ? {
+    /RedHat-Fedora/ => '/etc/spark',
+    /Debian|RedHat/ => '/etc/spark/conf',
+  }
+
+  $defaultdir = "${::osfamily}-${::operatingsystem}" ? {
+    /RedHat-Fedora/ => '/etc/sysconfig',
+    /Debian|RedHat/ => '/etc/default',
   }
 
   $keytab_historyserver = '/etc/security/keytab/spark.service.keytab'

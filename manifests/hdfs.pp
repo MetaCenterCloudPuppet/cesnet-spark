@@ -10,8 +10,8 @@ class spark::hdfs {
     ensure => present,
     system => true,
   }
-  case $::osfamily {
-    'RedHat': {
+  case "${::osfamily}-${::operatingsystem}" {
+    /RedHat-Fedora/: {
       user { 'spark':
         ensure     => present,
         system     => true,
@@ -23,7 +23,7 @@ class spark::hdfs {
         shell      => '/sbin/nologin',
       }
     }
-    'Debian': {
+    /Debian|RedHat/: {
       user { 'spark':
         ensure     => present,
         system     => true,
@@ -36,7 +36,7 @@ class spark::hdfs {
       }
     }
     default: {
-      notice("${::osfamily} not supported")
+      notice("${::operatingsystem} (${::osfamily}) not supported")
     }
   }
   Group['spark'] -> User['spark']

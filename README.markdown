@@ -29,8 +29,9 @@ The standalone Apache Spark cluster is not supported yet (there are missing mast
 
 Supported are:
 
-* Debian 7/wheezy: Cloudera distribution (tested with Hadoop 2.5.0)
-* Ubuntu 14/trusty: Cloudera distribution (tested with Hadoop 2.5.0)
+* Debian 7/wheezy: Cloudera distribution (tested with CDH 5.3.1, Spark 1.2.0)
+* Ubuntu 14/trusty: Cloudera distribution (tested with CDH 5.3.1, Spark 1.2.0)
+* RHEL 6, CentOS 6, Scientific Linux 6 (tested with CDH 5.4.2, Spark 1.3.0)
 
 <a name="setup"></a>
 ## Setup
