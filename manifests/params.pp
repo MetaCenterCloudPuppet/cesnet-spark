@@ -6,7 +6,6 @@
 class spark::params {
   case $::osfamily {
     'Debian': {
-      $alternatives = 'cluster'
       $confdir = '/etc/spark/conf'
       $daemons = {
         historyserver  => 'spark-history-server',
@@ -19,7 +18,6 @@ class spark::params {
       }
     }
     'RedHat': {
-      $alternatives = undef
       $confdir = '/etc/spark'
       $defaultdir = '/etc/sysconfig'
       $packages = {
@@ -29,6 +27,13 @@ class spark::params {
     default: {
       fail("${::operatingsystem} not supported")
     }
+  }
+
+  $alternatives = "${::osfamily}-${::operatingsystem}" ? {
+    /RedHat-Fedora/ => undef,
+    # https://github.com/puppet-community/puppet-alternatives/issues/18
+    /RedHat/        => '',
+    /Debian/        => 'cluster',
   }
 
   $keytab_historyserver = '/etc/security/keytab/spark.service.keytab'
