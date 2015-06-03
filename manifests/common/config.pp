@@ -31,8 +31,8 @@ class spark::common::config {
   }
 
   $confdir = $spark::confdir
-  $environments = $spark::environments
-  if $environments {
+  $environment = $spark::environment
+  if $environment {
     augeas{"${confdir}/spark-env.sh":
       lens    => 'Shellvars.lns',
       incl    => "${confdir}/spark-env.sh",

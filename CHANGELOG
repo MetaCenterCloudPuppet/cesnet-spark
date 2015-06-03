@@ -1,1 +1,11 @@
+#Changelog
+
 See https://github.com/MetaCenterCloudPuppet/cesnet-spark/commits/master.
+
+#Incompatible changes
+
+1.0.0:
+
+* **environments** parameter:
+ * name changed: environments -> environment
+ * type remains hash

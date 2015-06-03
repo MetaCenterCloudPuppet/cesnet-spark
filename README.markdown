@@ -42,7 +42,7 @@ Supported are:
 * Packages: installs Spark packages as needed (core, python, history server, ...)
 * Files modified:
  * */etc/spark/conf/spark-default.conf*
- * */etc/spark/conf/spark-env.sh* (modified, when *environments* parameter set)
+ * */etc/spark/conf/spark-env.sh* (modified, when *environment* parameter set)
  * */etc/default/spark*
  * */etc/profile.d/hadoop-spark.csh* (frontend)
  * */etc/profile.d/hadoop-spark.sh* (frontend)
@@ -189,13 +189,13 @@ HDFS hostname or defaultFS (for example: host:8020, haName, ...).
 
 Spark History server hostname.
 
-####`environments` undef
+####`environment` undef
 
 Environments to set for Apache Spark. "::undef" will unset the variable.
 
 You may need to increase memory in case of big amount of jobs:
 
-    environments => {
+    environment => {
       'SPARK_DAEMON_MEMORY' => '4096m',
     }
 

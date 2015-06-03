@@ -1,8 +1,8 @@
-<% @environments.keys.each do |k| -%>
-<% if @environments[k] == '::undef' -%>
+<% @environment.keys.each do |k| -%>
+<% if @environment[k] == '::undef' -%>
 rm /files<%= @confdir -%>/spark-env.sh/<%= k %>
 <% else -%>
-set /files<%= @confdir -%>/spark-env.sh/<%= k -%> <%= @environments[k] %>
+set /files<%= @confdir -%>/spark-env.sh/<%= k -%> <%= @environment[k] %>
 set /files<%= @confdir -%>/spark-env.sh/<%= k -%>/export ""
 <% end -%>
 <% end -%>
