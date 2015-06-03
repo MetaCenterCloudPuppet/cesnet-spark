@@ -8,7 +8,17 @@ spark.yarn.jar=hdfs://<%= @hdfs_hostname -%>/user/spark/share/lib/spark-assembly
 spark.master=yarn
 <% end -%>
 <% end -%>
-<% properties = scope.lookupvar('spark::_properties').select { |name,value| not (name =~ /^spark\.history\./) and value != '::undef' } -%>
-<% properties.keys.each do |p| -%>
-<%= p -%>=<%= scope.lookupvar('spark::_properties')[p] %>
+<% properties = scope.lookupvar('spark::_properties') -%>
+<%# sort the properties list for ruby <= 1.8 #-%>
+<% rv=RUBY_VERSION.split('.') -%>
+<% if rv[0] <= '1' and rv[1] <= '8' -%>
+<% properties_keys = properties.keys.sort -%>
+<% else -%>
+<% properties_keys = properties.keys -%>
+<% end -%>
+<% properties_keys.each do |p| -%>
+<% value = properties[p] -%>
+<%if not (p =~ /^spark\.history\./) and (value != '::undef') -%>
+<%= p -%>=<%= value %>
+<% end -%>
 <% end -%>

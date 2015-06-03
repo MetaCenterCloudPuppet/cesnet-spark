@@ -221,11 +221,6 @@ Enable YARN mode by default. This requires configured Hadoop using CESNET Hadoop
 
 Spark standalone cluster not supported (missing support master and worker daemons). But the YARN mode is working, so the full cluster submit (to Hadoop) is possible.
 
-And Puppet 3.x and Ruby >= 1.9.x is required, thus following systems are not supported:
-
-* RedHat/CentOS 6 and older
-* Ubuntu 12/precise and older
-
 <a name="development"></a>
 ## Development
 
