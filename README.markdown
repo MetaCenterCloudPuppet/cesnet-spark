@@ -9,6 +9,7 @@
     * [Spark in YARN cluster mode](#usage-yarn)
     * [Spark jar file optimization](#usage-jar-optimization)
     * [Add Spark History Server](#usage-history-server)
+    * [Upgrade](#upgrade)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
     * [Classes](#classes)
     * [Module Parameters](#parameters)
@@ -153,6 +154,32 @@ Spark History server stores details about Spark jobs. It is provided by the clas
       ...
       include spark::historyserver
     }
+
+<a name="upgrade"></a>
+### Upgrade
+
+The best way is to refresh configrations from the new original (=remove the old) and relaunch puppet on top of it. There is also problem with start-up scripts on Debian, which needs to be worked around, where Spark history server is used.
+
+For example:
+
+    alternative='cluster'
+    d='spark'
+    mv /etc/{d}$/conf.${alternative} /etc/${d}/conf.cdhXXX
+    update-alternatives --auto ${d}-conf
+
+    service spark-history-server stop || :
+    mv /etc/init.d/spark-history-server /etc/init.d/spark-history-server.prev
+
+    # upgrade
+    ...
+
+    puppet agent --test
+    #or: puppet apply ...
+
+    # restore start-up script from spark-history-server.dpkg-new or spark-history-server.prev
+    ...
+    service spark-history-server start
+
 
 <a name="reference"></a>
 ##Reference
