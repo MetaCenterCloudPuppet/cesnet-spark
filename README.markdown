@@ -1,3 +1,7 @@
+## Apache Spark Puppet Module
+
+[![Build Status](https://travis-ci.org/MetaCenterCloudPuppet/cesnet-spark.svg?branch=master)](https://travis-ci.org/MetaCenterCloudPuppet/cesnet-spark)
+
 #### Table of Contents
 
 1. [Overview](#overview)
