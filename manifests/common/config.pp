@@ -4,12 +4,18 @@
 #
 class spark::common::config {
   include stdlib
+  if $spark::yarn_enabled or $spark::hdfs_hostname {
+    contain hadoop::common::config
+    contain hadoop::common::hdfs::config
+  }
 
   ensure_packages($spark::packages['common'])
 
   $hdfs_hostname = $spark::hdfs_hostname
-  $jar_enable = $spark::jar_enable
   $historyserver_hostname = $spark::historyserver_hostname
+  $master_hostname = $spark::master_hostname
+  $master_port = $spark::master_port
+  $jar_enable = $spark::jar_enable
   $yarn_enable = $spark::yarn_enable
 
   file{"${spark::confdir}/spark-defaults.conf":
@@ -32,12 +38,10 @@ class spark::common::config {
 
   $confdir = $spark::confdir
   $environment = $spark::environment
-  if $environment {
-    augeas{"${confdir}/spark-env.sh":
-      lens    => 'Shellvars.lns',
-      incl    => "${confdir}/spark-env.sh",
-      changes => template('spark/spark-env.sh.augeas.erb'),
-    }
+  augeas{"${confdir}/spark-env.sh":
+    lens    => 'Shellvars.lns',
+    incl    => "${confdir}/spark-env.sh",
+    changes => template('spark/spark-env.sh.augeas.erb'),
   }
 
 }

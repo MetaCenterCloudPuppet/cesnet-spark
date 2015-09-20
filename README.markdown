@@ -11,6 +11,7 @@
     * [Setup requirements](#setup-requirements)
 4. [Usage - Configuration options and additional functionality](#usage)
     * [Spark in YARN cluster mode](#usage-yarn)
+    * [Spark in Spark cluster mode](#usage-master)
     * [Spark jar file optimization](#usage-jar-optimization)
     * [Add Spark History Server](#usage-history-server)
     * [Upgrade](#upgrade)
@@ -28,13 +29,11 @@ Puppet module for deployment of Apache Spark.
 <a name="module-description"></a>
 ## Module Description
 
-This puppet module installs and setup Apache Spark cluster, optionally with security.
-
-The standalone Apache Spark cluster is not supported yet (there are missing master and worker daemons here), only client is supported. But the YARN mode is working, so the full cluster submit (to Hadoop) is possible.
+This puppet module installs and setup Apache Spark cluster, optionally with security. YARN and Spark Master cluster modes are supported.
 
 Supported are:
 
-* Debian 7/wheezy: Cloudera distribution (tested with CDH 5.3.1, Spark 1.2.0)
+* Debian 7/wheezy: Cloudera distribution (tested with CDH 5.4.2, Spark 1.3.0)
 * Ubuntu 14/trusty: Cloudera distribution (tested with CDH 5.3.1, Spark 1.2.0)
 * RHEL 6, CentOS 6, Scientific Linux 6 (tested with CDH 5.4.2, Spark 1.3.0)
 
@@ -57,7 +56,9 @@ Supported are:
  * alternatives are used for */etc/spark/conf* in Cloudera
  * this module switches to the new alternative by default, so the Cloudera original configuration can be kept intact
 * Services:
+ * master server (when *spark::master* or *spark::master::service* included)
  * history server (when *spark::historyserver* or *spark::historyserver::service* included)
+ * worker node (when *spark::worker* or *spark::worker::service* included)
 * Helper files:
  * */var/lib/hadoop-hdfs/.puppet-spark-\**
 
@@ -72,10 +73,31 @@ Be aware of:
  * neither Cloudera nor Hortonworks repositories are configured in this module (for Cloudera you can find list and key files here: [http://archive.cloudera.com/cdh5/debian/wheezy/amd64/cdh/](http://archive.cloudera.com/cdh5/debian/wheezy/amd64/cdh/))
  * *java* is not installed by this module (*openjdk-7-jre-headless* is OK for Debian 7/wheezy)
 
-* **No inter-node dependencies**: working HDFS is required before deploying of Spark History Server, dependency of Spark HDFS initialization on HDFS namenode is handled properly (if the class *spark::hdfs* is included on the HDF namenode, see example)
+* **No inter-node dependencies**: working HDFS is required before deploying of Spark History Server, dependency of Spark HDFS initialization on HDFS namenode is handled properly (if the class *spark::hdfs* is included on the HDFS namenode, see examples)
 
 <a name="usage"></a>
 ## Usage
+
+There are two cluster modes, how to use Spark (these modes can be both enabled):
+
+* **YARN mode**: Hadoop is used for computing and scheduling
+* **Spark mode**: Spark Master Server and Worker Nodes are used for computing and scheduling
+
+Optionaly **Spark History Server** can be used (for both YARN or Spark modes), which would also require Hadoop HDFS.
+
+The Spark mode doesn't support security, only YARN mode can be used with secured Hadoop cluster.
+
+Puppet classes to include:
+
+* everywhere: *spark*
+* YARN mode (requires Hadoop cluster with YARN, see CESNET Hadoop puppet module):
+ * client: *spark::frontend*
+* Spark mode:
+ * master: *spark::master*
+ * slaves: *spark::worker*
+* optionaly History Server (requires Hadoop cluster with HDFS, see CESNET Hadoop puppet module):
+ * *spark::historyserver*
+ * on HDFS namenode: *spark::hdfs*
 
 <a name="usage-yarn"></a>
 ### Spark in YARN cluster mode
@@ -119,11 +141,54 @@ Issues:
 
 Notes:
 
-* for Spark clients: user must logout and login again or launch "*. /etc/profile.d/hadoop-spark.sh*"
+* for Spark clients (in YARN mode): user must logout and login again or launch "*. /etc/profile.d/hadoop-spark.sh*"
 
-Now you can submit spark jobs in the cluster mode:
+Now you can submit spark jobs in the cluster mode over Hadoop YARN:
 
     spark-submit --class org.apache.spark.examples.SparkPi --deploy-mode cluster --master yarn /usr/lib/spark/lib/spark-examples-1.2.0-cdh5.3.1-hadoop2.5.0-cdh5.3.1.jar 10
+
+<a name="usage-master"></a>
+### Spark in Spark Master cluster mode
+
+Example of Apache Spark in Spark cluster mode:
+
+    $master_hostname='spark-master.example.com'
+
+    class{'hadoop':
+      realm         => '',
+      hdfs_hostname => $master_hostname,
+      slaves        => ['spark1.example.com', 'spark2.example.com'],
+    }
+
+    class{'spark':
+      master_hostname        => $master_hostname,
+      hdfs_hostname          => $master_hostname,
+      historyserver_hostname => $master_hostname,
+      yarn_enable            => false,
+    }
+
+    node 'spark-master.example.com' {
+      include spark::master
+      include spark::historyserver
+      include hadoop::namenode
+      include spark::hdfs
+    }
+
+    node /spark(1|2).example.com/ {
+      include spark::worker
+      include hadoop::datanode
+    }
+
+    node 'client.example.com' {
+      include hadoop::frontend
+      include spark::frontend
+    }
+
+Notes:
+
+* two-nodes cluster is used here
+* there is also enabled Spark History Server (*spark::historyserver*), which requires HDFS (master: *hadoop::namenode*, slaves: *hadoop::datanode*)
+* YARN is disabled completely, to enable YARN: include also *hadoop::nodemanager* on the slave nodes (colocation with *spark::worker* is not needed) and *hadoop::resourcemanager* on master (see previous example, or CESNET Hadoop puppet module)
 
 <a name="usage-jar-optimization"></a>
 ### Spark jar file optimization
@@ -146,7 +211,7 @@ Copy the jar file after installation and deployment (superuser credentials are n
 <a name="usage-history-server"></a>
 ### Add Spark History Server
 
-Spark History server stores details about Spark jobs. It is provided by the class *spark::historyserver*. The parameter *historiserver\_hostname* needs to be also specified (replace *$::fqdn* by real hostname):
+Spark History server stores details about Spark jobs. It is provided by the class *spark::historyserver*. The parameter *historiserver\_hostname* needs to be also specified (replace *$::fqdn* by real hostname), and HDFS cluster is required:
 
     ...
     class{'spark':
@@ -194,12 +259,20 @@ For example:
 * common:
  * config
  * postinstall
-* **frontend** - Client
+* **frontend** - Apache Spark Client
  * config
  * install
 * init
 * **hdfs** - HDFS initializations
-* **historyserver** - History Server
+* **historyserver** - Apache Spark History Server
+ * config
+ * install
+ * service
+* **master** - Apache Spark Master Server
+ * config
+ * install
+ * service
+* **worker** - Apache Spark Worker Node
  * config
  * install
  * service
@@ -216,9 +289,29 @@ Use alternatives to switch configuration. Use it only when supported (like with 
 
 HDFS hostname or defaultFS (for example: host:8020, haName, ...).
 
+####`master_hostname` undef
+
+Spark Master hostname.
+
+####`master_port` '7077'
+
+Spark Master port.
+
+####`master_ui_port` '18080'
+
+Spark Master Web UI port.
+
 ####`historyserver_hostname` undef
 
 Spark History server hostname.
+
+####`historyserver_ui_port` '18082'
+
+Spark History Server Web UI port. Note, the Spark default value is 18080, which conflicts with default for Master server.
+
+####`worker_ui_port` '18081'
+
+Spark Worker node Web UI port.
 
 ####`environment` undef
 
@@ -251,11 +344,15 @@ Enable YARN mode by default. This requires configured Hadoop using CESNET Hadoop
 <a name="limitations"></a>
 ## Limitations
 
-Spark standalone cluster not supported (missing support master and worker daemons). But the YARN mode is working, so the full cluster submit (to Hadoop) is possible.
+Tested with Cloudera distribution.
+
+See also [Setup requirements](#setup-requirements).
 
 <a name="development"></a>
 ## Development
 
 * Repository: [https://github.com/MetaCenterCloudPuppet/cesnet-spark](https://github.com/MetaCenterCloudPuppet/cesnet-spark)
-* Tests: [https://github.com/MetaCenterCloudPuppet/hadoop-tests](https://github.com/MetaCenterCloudPuppet/hadoop-tests)
+* Tests:
+ * basic: see *.travis.yml*
+ * vagrant: [https://github.com/MetaCenterCloudPuppet/hadoop-tests](https://github.com/MetaCenterCloudPuppet/hadoop-tests)
 * Email: František Dvořák &lt;valtri@civ.zcu.cz&gt;

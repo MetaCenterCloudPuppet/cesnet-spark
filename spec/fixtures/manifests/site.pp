@@ -5,5 +5,7 @@ class{'hadoop':
 }
 
 class{'spark':
-  realm => $realm,
+  hdfs_hostname          => $::fqdn,
+  historyserver_hostname => $::fqdn,
+  realm                  => $realm,
 }

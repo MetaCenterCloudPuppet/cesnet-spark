@@ -12,9 +12,29 @@
 #
 # HDFS hostname or defaultFS (for example: host:8020, haName, ...).
 #
+# ####`master_hostname` undef
+#
+# Spark Master hostname.
+#
+# ####`master_port` '7077'
+#
+# Spark Master port.
+#
+# ####`master_ui_port` '18080'
+#
+# Spark Master Web UI port.
+#
 # ####`historyserver_hostname` undef
 #
 # Spark History server hostname.
+#
+# ####`historyserver_ui_port` '18082'
+#
+# Spark History Server Web UI port. Note, the Spark default value is 18080, which conflicts with default for Master server.
+#
+# ####`worker_ui_port` '18081'
+#
+# Spark Worker node Web UI port.
 #
 # ####`environment` undef
 #
@@ -47,7 +67,12 @@
 class spark (
   $alternatives = $params::alternatives,
   $hdfs_hostname = undef,
+  $master_hostname = undef,
+  $master_port = $params::master_port,
+  $master_ui_port = $params::master_ui_port,
   $historyserver_hostname = undef,
+  $historyserver_port = $params::historyserver_port,
+  $worker_ui_port = $params::worker_ui_port,
   $environment = undef,
   $properties = undef,
   $realm = undef,
@@ -67,12 +92,12 @@ class spark (
   if $historyserver_hostname {
     $hs_properties = {
       # must be with 'http://' to proper redirection from Hadoop with security
-      'spark.yarn.historyServer.address' => "http://${historyserver_hostname}:18080"
+      'spark.yarn.historyServer.address' => "http://${historyserver_hostname}:${historyserver_port}"
     }
   }
   if $historyserver_hostname == $::fqdn {
     $hs_daemon_properties = {
-      'spark.history.ui.port' => 18080,
+      'spark.history.ui.port' => $historyserver_port,
     }
   }
   if $realm and $realm != '' {

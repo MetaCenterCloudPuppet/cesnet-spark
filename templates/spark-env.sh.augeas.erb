@@ -1,3 +1,4 @@
+<% if @environment -%>
 <% @environment.keys.each do |k| -%>
 <% if @environment[k] == '::undef' -%>
 rm /files<%= @confdir -%>/spark-env.sh/<%= k %>
@@ -5,4 +6,23 @@ rm /files<%= @confdir -%>/spark-env.sh/<%= k %>
 set /files<%= @confdir -%>/spark-env.sh/<%= k -%> <%= @environment[k] %>
 set /files<%= @confdir -%>/spark-env.sh/<%= k -%>/export ""
 <% end -%>
+<% end -%>
+<% end -%>
+
+<%if @master_hostname -%>
+set /files<%= @confdir -%>/spark-env.sh/STANDALONE_SPARK_MASTER_HOST <%= @master_hostname %>
+set /files<%= @confdir -%>/spark-env.sh/STANDALONE_SPARK_MASTER_HOST/export ""
+<% else -%>
+set /files<%= @confdir -%>/spark-env.sh/STANDALONE_SPARK_MASTER_HOST `hostname`
+set /files<%= @confdir -%>/spark-env.sh/STANDALONE_SPARK_MASTER_HOST/export ""
+<% end -%>
+
+<%if @master_port -%>
+set /files<%= @confdir -%>/spark-env.sh/SPARK_MASTER_PORT <%= @master_port %>
+set /files<%= @confdir -%>/spark-env.sh/SPARK_MASTER_PORT/export ""
+<% end -%>
+
+<%if @master_ui_port -%>
+set /files<%= @confdir -%>/spark-env.sh/SPARK_MASTER_WEBUI_PORT <%= @master_ui_port %>
+set /files<%= @confdir -%>/spark-env.sh/SPARK_MASTER_WEBUI_PORT/export ""
 <% end -%>

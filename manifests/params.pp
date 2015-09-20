@@ -12,12 +12,16 @@ class spark::params {
     }
     /Debian|RedHat/: {
       $daemons = {
+        master         => 'spark-master',
         historyserver  => 'spark-history-server',
+        worker         => 'spark-worker',
       }
       $packages = {
         common         => 'spark-core',
+        master         => 'spark-master',
         frontend       => 'spark-python',
         historyserver  => 'spark-history-server',
+        worker         => 'spark-worker',
       }
     }
     default: {
@@ -43,4 +47,9 @@ class spark::params {
   }
 
   $keytab_historyserver = '/etc/security/keytab/spark.service.keytab'
+
+  $master_port = '7077'
+  $master_ui_port = '18080'
+  $worker_ui_port = '18081'
+  $historyserver_port = '18082'
 }

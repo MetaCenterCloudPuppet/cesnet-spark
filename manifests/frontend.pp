@@ -1,6 +1,6 @@
 # == Class spark::frontend
 #
-# Spark client.
+# Apache Spark Client.
 #
 class spark::frontend {
   include 'spark::frontend::install'
