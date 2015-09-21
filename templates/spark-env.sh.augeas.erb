@@ -26,3 +26,13 @@ set /files<%= @confdir -%>/spark-env.sh/SPARK_MASTER_PORT/export ""
 set /files<%= @confdir -%>/spark-env.sh/SPARK_MASTER_WEBUI_PORT <%= @master_ui_port %>
 set /files<%= @confdir -%>/spark-env.sh/SPARK_MASTER_WEBUI_PORT/export ""
 <% end -%>
+
+<%if @worker_port -%>
+set /files<%= @confdir -%>/spark-env.sh/SPARK_WORKER_PORT <%= @worker_port %>
+set /files<%= @confdir -%>/spark-env.sh/SPARK_WORKER_PORT/export ""
+<% end -%>
+
+<%if @worker_ui_port -%>
+set /files<%= @confdir -%>/spark-env.sh/SPARK_WORKER_WEBUI_PORT <%= @worker_ui_port %>
+set /files<%= @confdir -%>/spark-env.sh/SPARK_WORKER_WEBUI_PORT/export ""
+<% end -%>

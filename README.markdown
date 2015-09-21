@@ -305,9 +305,18 @@ Spark Master Web UI port.
 
 Spark History server hostname.
 
-####`historyserver_ui_port` '18082'
+####`historyserver_port` '18082'
 
-Spark History Server Web UI port. Note, the Spark default value is 18080, which conflicts with default for Master server.
+Spark History Server Web UI port.
+
+Notes:
+
+* the Spark default value is 18080, which conflicts with default for Master server
+* no *historyserver\_ui\_port* parameter (Web UI port is the same as the RPC port)
+
+####`worker_port` '7078'
+
+Spark Worker node port.
 
 ####`worker_ui_port` '18081'
 
