@@ -52,5 +52,5 @@ class spark::params {
   $master_ui_port = '18080'
   $worker_port = '7078'
   $worker_ui_port = '18081'
-  $historyserver_port = '18082'
+  $historyserver_port = '18088'
 }

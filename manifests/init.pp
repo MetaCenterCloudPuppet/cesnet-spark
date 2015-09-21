@@ -28,7 +28,7 @@
 #
 # Spark History server hostname.
 #
-# ####`historyserver_port` '18082'
+# ####`historyserver_port` '18088'
 #
 # Spark History Server Web UI port.
 #
