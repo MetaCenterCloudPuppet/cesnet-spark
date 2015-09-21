@@ -14,6 +14,7 @@
     * [Spark in Spark cluster mode](#usage-master)
     * [Spark jar file optimization](#usage-jar-optimization)
     * [Add Spark History Server](#usage-history-server)
+    * [Multihome](#multihome)
     * [Upgrade](#upgrade)
 5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
     * [Classes](#classes)
@@ -222,6 +223,21 @@ Spark History server stores details about Spark jobs. It is provided by the clas
     node default {
       ...
       include spark::historyserver
+    }
+
+<a name="multihome"></a>
+### Multihome
+
+Use *SPARK_LOCAL_IP* in *environment* parameter to bind RPC listen address to 0.0.0.0:
+
+    environment => {
+      'SPARK_LOCAL_IP' => '0.0.0.0',
+    }
+
+To bind to specific interface:
+
+    environment => {
+      'SPARK_LOCAL_IP' => $::ipaddress_eth1,
     }
 
 <a name="upgrade"></a>
