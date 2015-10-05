@@ -4,28 +4,22 @@
 
 #### Table of Contents
 
-1. [Overview](#overview)
-2. [Module Description - What the module does and why it is useful](#module-description)
-3. [Setup - The basics of getting started with spark](#setup)
+1. [Module Description - What the module does and why it is useful](#module-description)
+2. [Setup - The basics of getting started with spark](#setup)
     * [What spark affects](#what-spark-affects)
     * [Setup requirements](#setup-requirements)
-4. [Usage - Configuration options and additional functionality](#usage)
+3. [Usage - Configuration options and additional functionality](#usage)
     * [Spark in YARN cluster mode](#usage-yarn)
     * [Spark in Spark cluster mode](#usage-master)
     * [Spark jar file optimization](#usage-jar-optimization)
     * [Add Spark History Server](#usage-history-server)
     * [Multihome](#multihome)
     * [Upgrade](#upgrade)
-5. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
+4. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
     * [Classes](#classes)
-    * [Module Parameters](#parameters)
+    * [Module Parameters (spark class)](#class-spark)
 5. [Limitations - OS compatibility, etc.](#limitations)
 6. [Development - Guide for contributing to the module](#development)
-
-<a name="overview"></a>
-## Overview
-
-Puppet module for deployment of Apache Spark.
 
 <a name="module-description"></a>
 ## Module Description
@@ -34,9 +28,9 @@ This puppet module installs and setup Apache Spark cluster, optionally with secu
 
 Supported are:
 
-* Debian 7/wheezy: Cloudera distribution (tested with CDH 5.4.2, Spark 1.3.0)
-* Ubuntu 14/trusty: Cloudera distribution (tested with CDH 5.3.1, Spark 1.2.0)
-* RHEL 6, CentOS 6, Scientific Linux 6 (tested with CDH 5.4.2, Spark 1.3.0)
+* **Debian 7/wheezy**: Cloudera distribution (tested with CDH 5.4.2, Spark 1.3.0)
+* **Ubuntu 14/trusty**: Cloudera distribution (tested with CDH 5.3.1, Spark 1.2.0)
+* **RHEL 6 and clones**: Cloudera distribution (tested with CDH 5.4.2, Spark 1.3.0)
 
 <a name="setup"></a>
 ## Setup
@@ -84,7 +78,7 @@ There are two cluster modes, how to use Spark (these modes can be both enabled):
 * **YARN mode**: Hadoop is used for computing and scheduling
 * **Spark mode**: Spark Master Server and Worker Nodes are used for computing and scheduling
 
-Optionaly **Spark History Server** can be used (for both YARN or Spark modes), which would also require Hadoop HDFS.
+Optionally **Spark History Server** can be used (for both YARN or Spark modes), which would also require Hadoop HDFS.
 
 The Spark mode doesn't support security, only YARN mode can be used with secured Hadoop cluster.
 
@@ -96,14 +90,16 @@ Puppet classes to include:
 * Spark mode:
  * master: *spark::master*
  * slaves: *spark::worker*
-* optionaly History Server (requires Hadoop cluster with HDFS, see CESNET Hadoop puppet module):
+* optionally History Server (requires Hadoop cluster with HDFS, see CESNET Hadoop puppet module):
  * *spark::historyserver*
  * on HDFS namenode: *spark::hdfs*
 
 <a name="usage-yarn"></a>
 ### Spark in YARN cluster mode
 
-Example of Apache Spark over Hadoop cluster. For simplicity one-machine Hadoop cluster is used (everything is on *$::fqdn*, replication factor 1).
+**Example**: Apache Spark over Hadoop cluster:
+
+For simplicity one-machine Hadoop cluster is used (everything is on *$::fqdn*, replication factor 1).
 
     class{'hadoop':
       hdfs_hostname => $::fqdn,
@@ -135,13 +131,10 @@ Example of Apache Spark over Hadoop cluster. For simplicity one-machine Hadoop c
       include spark::hdfs
     }
 
-Issues:
+Notes:
 
 * if collocated with HDFS namenode, add dependency *Class['hadoop::namenode::service'] -> Class['spark::historyserver::service']*
 * if not collocated, it is needed to have HDFS namenode running first (puppet should be launched later again, if Spark History Server won't start because of HDFS)
-
-Notes:
-
 * for Spark clients (in YARN mode): user must logout and login again or launch "*. /etc/profile.d/hadoop-spark.sh*"
 
 Now you can submit spark jobs in the cluster mode over Hadoop YARN:
@@ -151,7 +144,9 @@ Now you can submit spark jobs in the cluster mode over Hadoop YARN:
 <a name="usage-master"></a>
 ### Spark in Spark Master cluster mode
 
-Example of Apache Spark in Spark cluster mode:
+**Example**: Apache Spark in Spark cluster mode:
+
+Two-nodes cluster is used here.
 
     $master_hostname='spark-master.example.com'
 
@@ -187,14 +182,13 @@ Example of Apache Spark in Spark cluster mode:
 
 Notes:
 
-* two-nodes cluster is used here
 * there is also enabled Spark History Server (*spark::historyserver*), which requires HDFS (master: *hadoop::namenode*, slaves: *hadoop::datanode*)
-* YARN is disabled completely, to enable YARN: include also *hadoop::nodemanager* on the slave nodes (colocation with *spark::worker* is not needed) and *hadoop::resourcemanager* on master (see previous example, or CESNET Hadoop puppet module)
+* YARN is disabled completely, to enable YARN: include also *hadoop::nodemanager* on the slave nodes (collocation with *spark::worker* is not needed) and *hadoop::resourcemanager* on master (see previous example, or CESNET Hadoop puppet module)
 
 <a name="usage-jar-optimization"></a>
 ### Spark jar file optimization
 
-The *spark-assembly.jar* file is copied into HDFS on each job submit. It is possible to optimize this by copying it manually. Keep in mind the jar file needs to be refreshed on HDFS with each Spark SW update.
+The *spark-assembly.jar* file is copied into HDFS on each job submit. It is possible to optimize this by copying it beforehand. Keep in mind the jar file needs to be refreshed on HDFS with each Spark SW update.
 
     ...
 
@@ -228,22 +222,19 @@ Spark History server stores details about Spark jobs. It is provided by the clas
 <a name="multihome"></a>
 ### Multihome
 
-Use *SPARK_LOCAL_IP* in *environment* parameter to bind RPC listen address to 0.0.0.0:
+Multihome is not supported.
+
+You may also need to set *SPARK\_LOCAL\_IP* to bind RPC listen address to the default interface:
 
     environment => {
       'SPARK_LOCAL_IP' => '0.0.0.0',
-    }
-
-To bind to specific interface:
-
-    environment => {
-      'SPARK_LOCAL_IP' => $::ipaddress_eth1,
+      #'SPARK_LOCAL_IP' => $::ipaddress_eth0,
     }
 
 <a name="upgrade"></a>
 ### Upgrade
 
-The best way is to refresh configrations from the new original (=remove the old) and relaunch puppet on top of it. There is also problem with start-up scripts on Debian, which needs to be worked around, where Spark history server is used.
+The best way is to refresh configurations from the new original (=remove the old) and relaunch puppet on top of it. There is also problem with start-up scripts on Debian, which needs to be worked around, where Spark history server is used.
 
 For example:
 
@@ -272,101 +263,113 @@ For example:
 <a name="classes"></a>
 ###Classes
 
-* common:
- * config
- * postinstall
-* **frontend** - Apache Spark Client
- * config
- * install
-* init
-* **hdfs** - HDFS initializations
-* **historyserver** - Apache Spark History Server
- * config
- * install
- * service
-* **master** - Apache Spark Master Server
- * config
- * install
- * service
-* **worker** - Apache Spark Worker Node
- * config
- * install
- * service
-* params
+* [**`spark`**](#class-spark): Main configuration class for CESNET Apache Spark puppet module
+* `spark::common`:
+ * `spark::common::config`
+ * `spark::common::postinstall`
+* **`spark::frontend`**: Apache Spark Client
+ * `spark::frontend::config`
+ * `spark::frontend::install`
+* **`spark::hdfs`**: HDFS initialization
+* **`spark::historyserver`**: Apache Spark History Server
+ * `spark::historyserver::config`
+ * `spark::historyserver::install`
+ * `spark::historyserver::service`
+* **`spark::master`**: Apache Spark Master Server
+ * `spark::master::config`
+ * `spark::master::install`
+ * `spark::master::service`
+* **`spark::worker`**: Apache Spark Worker Node
+ * `spark::worker::config`
+ * `spark::worker::install`
+ * `spark::worker::service`
+* `spark::params`
 
-<a name="parameters"></a>
-###Module Parameters
+<a name="class-spark"></a>
+### `spark` class
 
-####`alternatives`
+####Parameters
+
+#####`alternatives`
 
 Switches the alternatives used for the configuration. Default: 'cluster' (Debian) or undef.
 
 It can be used only when supported (for example with Cloudera distribution).
 
-####`hdfs_hostname` undef
+#####`hdfs_hostname`
 
-HDFS hostname or defaultFS (for example: host:8020, haName, ...).
+HDFS hostname or defaultFS (for example: 'host:8020', 'haName', ...). Default: undef.
 
-####`master_hostname` undef
+Enables storing events to HSFS and makes *jar_enable* option available.
 
-Spark Master hostname.
+#####`master_hostname`
 
-####`master_port` '7077'
+Spark Master hostname. Default: undef.
 
-Spark Master port.
+#####`master_port`
 
-####`master_ui_port` '18080'
+Spark Master port. Default: '7077'.
 
-Spark Master Web UI port.
+#####`master_ui_port`
 
-####`historyserver_hostname` undef
+Spark Master Web UI port. Default: '18080'.
 
-Spark History server hostname.
+#####`historyserver_hostname`
 
-####`historyserver_port` '18088'
+Spark History server hostname. Default: undef.
 
-Spark History Server Web UI port.
+#####`historyserver_port`
+
+Spark History Server Web UI port. Default: '180088'.
 
 Notes:
 
 * the Spark default value is 18080, which conflicts with default for Master server
 * no *historyserver\_ui\_port* parameter (Web UI port is the same as the RPC port)
 
-####`worker_port` '7078'
+#####`worker_port`
 
-Spark Worker node port.
+Spark Worker node port. Default: '7078'.
 
-####`worker_ui_port` '18081'
+#####`worker_ui_port`
 
-Spark Worker node Web UI port.
+Spark Worker node Web UI port. Default: '18081'.
 
-####`environment` undef
+#####`environment`
 
-Environments to set for Apache Spark. "::undef" will unset the variable.
+Environments to set for Apache Spark. Default: undef.
 
-You may need to increase memory in case of big amount of jobs:
+The value is a hash. The '::undef' values will unset the particular variables.
+
+Example: you may need to increase memory in case of big amount of jobs:
 
     environment => {
       'SPARK_DAEMON_MEMORY' => '4096m',
     }
 
-#### `properties` undef
+#####`properties`
 
-Spark properties to set.
+Spark properties to set. Default: undef.
 
-####`realm` undef
+#####`realm`
 
-Kerberos realm. Non-empty string enables security.
+Kerberos realm. Default: undef.
 
-####`jar_enable` false
+Non-empty string enables security.
 
-Configure Apache Spark to search Spark jar file in *$hdfs\_hostname/user/spark/share/lib/spark-assembly.jar*. The jar needs to be copied to HDFS manually after installation, and also manually updated after each Spark SW update:
+#####`jar_enable`
+
+Configure Apache Spark to search Spark jar file in *$hdfs\_hostname/user/spark/share/lib/spark-assembly.jar*. Default: false.
+
+The jar needs to be copied to HDFS manually after installation, and also manually updated after each Spark SW update:
 
     hdfs dfs -put /usr/lib/spark/spark-assembly.jar /user/spark/share/lib/spark-assembly.jar
 
-####`yarn_enable` true
+#####`yarn_enable`
 
-Enable YARN mode by default. This requires configured Hadoop using CESNET Hadoop puppet module.
+Enable YARN mode. Default: true.
+
+This requires configured Hadoop using CESNET Hadoop puppet module.
 
 <a name="limitations"></a>
 ## Limitations
