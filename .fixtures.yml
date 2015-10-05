@@ -3,5 +3,6 @@ fixtures:
     stdlib: "https://github.com/puppetlabs/puppetlabs-stdlib"
     alternatives: "git://github.com/puppet-community/puppet-alternatives"
     hadoop: "git://github.com/MetaCenterCloudPuppet/cesnet-hadoop"
+    hadoop_lib: "git://github.com/MetaCenterCloudPuppet/cesnet-hadoop_lib"
   symlinks:
     spark: "#{source_dir}"

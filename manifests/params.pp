@@ -29,13 +29,6 @@ class spark::params {
     }
   }
 
-  $alternatives = "${::osfamily}-${::operatingsystem}" ? {
-    /RedHat-Fedora/ => undef,
-    # https://github.com/puppet-community/puppet-alternatives/issues/18
-    /RedHat/        => '',
-    /Debian/        => 'cluster',
-  }
-
   $confdir = "${::osfamily}-${::operatingsystem}" ? {
     /RedHat-Fedora/ => '/etc/spark',
     /Debian|RedHat/ => '/etc/spark/conf',

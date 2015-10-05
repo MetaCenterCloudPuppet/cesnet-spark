@@ -4,9 +4,11 @@
 #
 # === Parameters
 #
-# ####`alternatives` (see params.pp)
+# ####`alternatives`
 #
-# Use alternatives to switch configuration. Use it only when supported (like with Cloudera).
+# Switches the alternatives used for the configuration. Default: 'cluster' (Debian) or undef.
+#
+# It can be used only when supported (for example with Cloudera distribution).
 #
 # ####`hdfs_hostname` undef
 #
@@ -74,7 +76,7 @@
 # Enable YARN mode by default. This requires configured Hadoop using CESNET Hadoop puppet module.
 #
 class spark (
-  $alternatives = $params::alternatives,
+  $alternatives = '::default',
   $hdfs_hostname = undef,
   $master_hostname = undef,
   $master_port = $params::master_port,

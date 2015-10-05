@@ -297,9 +297,11 @@ For example:
 <a name="parameters"></a>
 ###Module Parameters
 
-####`alternatives` (see params.pp)
+####`alternatives`
 
-Use alternatives to switch configuration. Use it only when supported (like with Cloudera).
+Switches the alternatives used for the configuration. Default: 'cluster' (Debian) or undef.
+
+It can be used only when supported (for example with Cloudera distribution).
 
 ####`hdfs_hostname` undef
 
