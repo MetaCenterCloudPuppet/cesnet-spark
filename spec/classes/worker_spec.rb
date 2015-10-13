@@ -1,9 +1,8 @@
 require 'spec_helper'
 
 describe 'spark::worker::config', :type => 'class' do
-  $test_os.each do |facts|
-    os = facts['operatingsystem']
-    path = $test_config_dir[os]
+  on_supported_os.each do |os,facts|
+    path = test_config_dir(os)
 
     context "on #{os}" do
       let(:facts) do
@@ -16,9 +15,7 @@ describe 'spark::worker::config', :type => 'class' do
 end
 
 describe 'spark::worker', :type => 'class' do
-  $test_os.each do |facts|
-    os = facts['operatingsystem']
-
+  on_supported_os.each do |os,facts|
     context "on #{os}" do
       let(:facts) do
         facts
