@@ -14,6 +14,7 @@
     * [Spark jar file optimization](#usage-jar-optimization)
     * [Add Spark History Server](#usage-history-server)
     * [Multihome](#multihome)
+    * [Cluster with more HDFS Name nodes](#multinn)
     * [Upgrade](#upgrade)
 4. [Reference - An under-the-hood peek at what the module is doing and how](#reference)
     * [Classes](#classes)
@@ -231,6 +232,23 @@ You may also need to set *SPARK\_LOCAL\_IP* to bind RPC listen address to the de
       #'SPARK_LOCAL_IP' => $::ipaddress_eth0,
     }
 
+<a name="multinn"></a>
+### Cluster with more HDFS Name nodes
+
+If there are used more HDFS namenodes in the Hadoop cluster (high availability, namespaces, ...), it is needed to have 'spark' system user on all of them to autorization work properly. You could install full Spark client (using spark::frontend::install), but just creating the user is enough (using spark::user).
+
+Note, the spark::hdfs class must be used too, but only on one of the HDFS namenodes. It includes the spark::user.
+
+Example:
+
+    node <HDFS_NAMENODE> {
+      include spark::hdfs
+    }
+
+    node <HDFS_OTHER_NAMENODE> {
+      include spark::user
+    }
+
 <a name="upgrade"></a>
 ### Upgrade
 
@@ -284,6 +302,7 @@ For example:
  * `spark::worker::install`
  * `spark::worker::service`
 * `spark::params`
+* **`spark::user`**: Create spark system user
 
 <a name="class-spark"></a>
 ### `spark` class
