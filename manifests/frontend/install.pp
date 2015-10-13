@@ -3,7 +3,7 @@
 # Install Spark client packages.
 #
 class spark::frontend::install {
-  include stdlib
+  include ::stdlib
   contain spark::common::postinstall
 
   ensure_packages($spark::packages['frontend'])

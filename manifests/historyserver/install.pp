@@ -3,7 +3,7 @@
 # Install Spark History Server packages.
 #
 class spark::historyserver::install {
-  include stdlib
+  include ::stdlib
   contain spark::common::postinstall
 
   $path = '/sbin:/usr/sbin:/bin:/usr/bin'

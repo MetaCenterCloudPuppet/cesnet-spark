@@ -3,7 +3,7 @@
 # Common configuration for Apache Spark.
 #
 class spark::common::config {
-  include stdlib
+  include ::stdlib
   if $spark::yarn_enabled or $spark::hdfs_hostname {
     contain hadoop::common::config
     contain hadoop::common::hdfs::config

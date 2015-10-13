@@ -3,7 +3,7 @@
 # Install Spark Master packages.
 #
 class spark::master::install {
-  include stdlib
+  include ::stdlib
   contain spark::common::postinstall
 
   $path = '/sbin:/usr/sbin:/bin:/usr/bin'

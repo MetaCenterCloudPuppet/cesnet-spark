@@ -18,7 +18,7 @@ class spark (
   $jar_enable = false,
   $yarn_enable = true,
 ) inherits ::spark::params {
-  include stdlib
+  include ::stdlib
 
   if $alternatives {
     validate_string($alternatives)
@@ -31,7 +31,7 @@ class spark (
   if $historyserver_hostname {
     $hs_properties = {
       # must be with 'http://' to proper redirection from Hadoop with security
-      'spark.yarn.historyServer.address' => "http://${historyserver_hostname}:${historyserver_port}"
+      'spark.yarn.historyServer.address' => "http://${historyserver_hostname}:${historyserver_port}",
     }
   }
   if $historyserver_hostname == $::fqdn {

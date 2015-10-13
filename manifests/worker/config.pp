@@ -3,6 +3,6 @@
 # This class is called from spark::worker
 #
 class spark::worker::config {
-  include stdlib
+  include ::stdlib
   contain spark::common::config
 }

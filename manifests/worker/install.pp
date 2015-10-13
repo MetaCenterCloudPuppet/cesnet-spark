@@ -3,7 +3,7 @@
 # Install Spark Worker packages.
 #
 class spark::worker::install {
-  include stdlib
+  include ::stdlib
   contain spark::common::postinstall
 
   ensure_packages($spark::packages['worker'])

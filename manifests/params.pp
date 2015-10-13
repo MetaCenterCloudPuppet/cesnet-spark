@@ -7,7 +7,7 @@ class spark::params {
   case "${::osfamily}-${::operatingsystem}" {
     /RedHat-Fedora/: {
       $packages = {
-        frontend => 'spark'
+        frontend => 'spark',
       }
     }
     /Debian|RedHat/: {

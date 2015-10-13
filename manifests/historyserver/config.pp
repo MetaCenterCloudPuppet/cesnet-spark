@@ -3,7 +3,7 @@
 # This class is called from spark::historyserver.
 #
 class spark::historyserver::config {
-  include stdlib
+  include ::stdlib
   contain spark::common::config
 
   validate_string($spark::hdfs_hostname)
