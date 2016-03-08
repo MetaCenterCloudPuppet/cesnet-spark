@@ -39,6 +39,11 @@ class spark::params {
     /Debian|RedHat/ => '/etc/default',
   }
 
+  $hive_configfile = "${::osfamily}-${::operatingsystem}" ? {
+    /RedHat-Fedora/ => '../etc/hive/hive-site.xml',
+    /Debian|RedHat/ => '../../hive/conf/hive-site.xml',
+  }
+
   $keytab_historyserver = '/etc/security/keytab/spark.service.keytab'
 
   $master_port = '7077'

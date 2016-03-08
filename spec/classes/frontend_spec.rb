@@ -10,6 +10,7 @@ describe 'spark::frontend::config', :type => 'class' do
       end
       it { should compile.with_all_deps }
       it { should contain_file(path + '/spark-defaults.conf') }
+      it { should contain_file(path + '/hive-site.xml').with_ensure('link') }
       it { should contain_file('/etc/profile.d/hadoop-spark.sh') }
     end
   end

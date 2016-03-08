@@ -15,6 +15,7 @@ class spark (
   $environment = undef,
   $properties = undef,
   $realm = undef,
+  $hive_enable = true,
   $jar_enable = false,
   $yarn_enable = true,
 ) inherits ::spark::params {

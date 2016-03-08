@@ -376,6 +376,14 @@ Kerberos realm. Default: undef.
 
 Non-empty string enables security.
 
+#####`hive_enable`
+
+Enable support for Hive metastore. Default: true.
+
+This just create the symlink of the Hive configuration file in the Spark configuration directory on the frontend.
+
+There is required to install also Hive JDBC (or Spark assembly with Hive JDBC) at all worker nodes.
+
 #####`jar_enable`
 
 Configure Apache Spark to search Spark jar file in *$hdfs\_hostname/user/spark/share/lib/spark-assembly.jar*. Default: false.

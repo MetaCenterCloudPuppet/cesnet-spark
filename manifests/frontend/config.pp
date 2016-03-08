@@ -4,6 +4,12 @@
 #
 class spark::frontend::config {
   include ::spark::common::config
+  if $spark::hive_enable {
+    file { "${spark::confdir}/hive-site.xml":
+      ensure => link,
+      target => $::spark::hive_configfile,
+    }
+  }
   if $spark::yarn_enable {
     include ::hadoop::common::yarn::config
   }
