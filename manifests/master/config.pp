@@ -6,5 +6,5 @@ class spark::master::config {
   include ::stdlib
   contain spark::common::config
 
-  validate_string($spark::master)
+  validate_string($spark::master_hostname)
 }

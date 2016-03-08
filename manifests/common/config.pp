@@ -4,7 +4,7 @@
 #
 class spark::common::config {
   include ::stdlib
-  if $spark::yarn_enabled or $spark::hdfs_hostname {
+  if $spark::yarn_enable or $spark::hdfs_hostname {
     contain hadoop::common::config
     contain hadoop::common::hdfs::config
   }

@@ -39,6 +39,8 @@ class spark (
     $hs_daemon_properties = {
       'spark.history.ui.port' => $historyserver_port,
     }
+  } else {
+    $hs_daemon_properties = {}
   }
   if $realm and $realm != '' {
     if $historyserver_hostname == $::fqdn {
@@ -47,7 +49,11 @@ class spark (
         'spark.history.kerberos.keytab' => '/etc/security/keytab/spark.service.keytab',
         'spark.history.kerberos.principal' => "spark/${::fqdn}@${realm}",
       }
+    } else {
+      $security_properties = {}
     }
+  } else {
+    $security_properties = {}
   }
 
   $_properties = merge($hs_properties, $hs_daemon_properties, $security_properties, $properties)
