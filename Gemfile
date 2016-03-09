@@ -8,7 +8,7 @@ group :test do
   gem "puppetlabs_spec_helper"
   gem "metadata-json-lint"
   gem "rspec-puppet-facts"
-  gem 'simplecov'
+  gem 'simplecov', '>= 0.11.0'
   gem 'simplecov-console'
 
   gem "puppet-lint-absolute_classname-check"
