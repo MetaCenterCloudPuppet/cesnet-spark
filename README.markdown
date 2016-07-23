@@ -1,6 +1,6 @@
 ## Apache Spark Puppet Module
 
-[![Build Status](https://travis-ci.org/MetaCenterCloudPuppet/cesnet-spark.svg?branch=master)](https://travis-ci.org/MetaCenterCloudPuppet/cesnet-spark)
+[![Build Status](https://travis-ci.org/MetaCenterCloudPuppet/cesnet-spark.svg?branch=master)](https://travis-ci.org/MetaCenterCloudPuppet/cesnet-spark) [![Puppet Forge](https://img.shields.io/puppetforge/v/cesnet/spark.svg)](https://forge.puppetlabs.com/cesnet/spark)
 
 #### Table of Contents
 
@@ -29,7 +29,7 @@ This puppet module installs and setup Apache Spark cluster, optionally with secu
 
 Supported are:
 
-* **Debian 7/wheezy**: Cloudera distribution (tested with CDH 5.4.2, Spark 1.3.0)
+* **Debian 7/wheezy**: Cloudera distribution (tested with CDH 5.4.2/5.8.0, Spark 1.3.0/1.6.0)
 * **Ubuntu 14/trusty**: Cloudera distribution (tested with CDH 5.3.1, Spark 1.2.0)
 * **RHEL 6 and clones**: Cloudera distribution (tested with CDH 5.4.2, Spark 1.3.0)
 
