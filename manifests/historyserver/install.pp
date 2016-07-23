@@ -12,7 +12,7 @@ class spark::historyserver::install {
     # Debian really fucked up design around postinstallation scripts
     'debian': {
       exec {'debian-fuckup':
-        command => 'touch /etc/init.d/spark-history-server && chmod +x /etc/init.d/spark-history-server',
+        command => 'echo "#! /bin/sh" > /etc/init.d/spark-history-server && chmod +x /etc/init.d/spark-history-server',
         path    => $path,
         creates => '/etc/init.d/spark-history-server',
       }
