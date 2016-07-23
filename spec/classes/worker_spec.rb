@@ -21,6 +21,7 @@ describe 'spark::worker', :type => 'class' do
         facts
       end
       it { should compile.with_all_deps }
+      it { should contain_class('spark::worker') }
       it { should contain_class('spark::worker::install') }
       it { should contain_class('spark::worker::config') }
       it { should contain_class('spark::worker::service') }

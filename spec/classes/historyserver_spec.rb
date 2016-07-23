@@ -21,6 +21,7 @@ describe 'spark::historyserver', :type => 'class' do
         facts
       end
       it { should compile.with_all_deps }
+      it { should contain_class('spark::historyserver') }
       it { should contain_class('spark::historyserver::install') }
       it { should contain_class('spark::historyserver::config') }
       it { should contain_class('spark::historyserver::service') }

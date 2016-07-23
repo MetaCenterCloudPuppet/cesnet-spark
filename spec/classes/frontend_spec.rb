@@ -23,6 +23,7 @@ describe 'spark::frontend', :type => 'class' do
         facts
       end
       it { should compile.with_all_deps }
+      it { should contain_class('spark::frontend') }
       it { should contain_class('spark::frontend::install') }
       it { should contain_class('spark::frontend::config') }
     end

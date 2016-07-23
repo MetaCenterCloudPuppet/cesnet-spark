@@ -21,6 +21,7 @@ describe 'spark::master', :type => 'class' do
         facts
       end
       it { should compile.with_all_deps }
+      it { should contain_class('spark::master') }
       it { should contain_class('spark::master::install') }
       it { should contain_class('spark::master::config') }
       it { should contain_class('spark::master::service') }
