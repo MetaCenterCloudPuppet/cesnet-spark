@@ -7,8 +7,8 @@ class spark::historyserver {
   include ::spark::historyserver::config
   include ::spark::historyserver::service
 
-  Class['spark::historyserver::install'] ->
-  Class['spark::historyserver::config'] ~>
-  Class['spark::historyserver::service'] ->
-  Class['spark::historyserver']
+  Class['spark::historyserver::install']
+  -> Class['spark::historyserver::config']
+  ~> Class['spark::historyserver::service']
+  -> Class['spark::historyserver']
 }
