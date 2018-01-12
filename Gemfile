@@ -2,7 +2,7 @@ source ENV['GEM_SOURCE'] || "https://rubygems.org"
 
 group :test do
   gem "rake", '< 11'
-  gem "puppet", ENV['PUPPET_GEM_VERSION'] || '~> 5.1.0'
+  gem "puppet", ENV['PUPPET_GEM_VERSION'] || '~> 5.3.0'
   gem "rspec"
   gem "rspec-puppet"
   gem "rspec-puppet-facts"
@@ -19,8 +19,6 @@ group :test do
   gem "puppet-lint-unquoted_string-check"
   gem 'puppet-lint-resource_reference_syntax'
 
-  gem 'json', '< 2.0.0' if RUBY_VERSION < '2.0.0'
-  gem 'json_pure', '< 2.0.0' if RUBY_VERSION < '2.0.0'
   gem 'listen', '< 3.1' if RUBY_VERSION < '2.2'
   gem 'parallel_tests', '<= 2.9.0' if RUBY_VERSION < '2.0.0'
 end
