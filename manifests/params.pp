@@ -12,16 +12,16 @@ class spark::params {
     }
     /Debian|RedHat/: {
       $daemons = {
-        master         => 'spark-master',
-        historyserver  => 'spark-history-server',
-        worker         => 'spark-worker',
+        master        => 'spark-master',
+        historyserver => 'spark-history-server',
+        worker        => 'spark-worker',
       }
       $packages = {
-        common         => 'spark-core',
-        master         => 'spark-master',
-        frontend       => 'spark-python',
-        historyserver  => 'spark-history-server',
-        worker         => 'spark-worker',
+        common        => 'spark-core',
+        master        => 'spark-master',
+        frontend      => 'spark-python',
+        historyserver => 'spark-history-server',
+        worker        => 'spark-worker',
       }
     }
     default: {

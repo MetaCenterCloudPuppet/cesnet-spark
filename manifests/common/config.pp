@@ -21,7 +21,7 @@ class spark::common::config {
   $jar_enable = $spark::jar_enable
   $yarn_enable = $spark::yarn_enable
 
-  file{"${spark::confdir}/spark-defaults.conf":
+  file { "${spark::confdir}/spark-defaults.conf":
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
@@ -30,7 +30,7 @@ class spark::common::config {
     require => Package[$spark::packages['common']],
   }
 
-  file{"${spark::defaultdir}/spark":
+  file { "${spark::defaultdir}/spark":
     owner   => 'root',
     group   => 'root',
     mode    => '0644',
@@ -41,7 +41,7 @@ class spark::common::config {
 
   $confdir = $spark::confdir
   $environment = $spark::environment
-  augeas{"${confdir}/spark-env.sh":
+  augeas { "${confdir}/spark-env.sh":
     lens    => 'Shellvars.lns',
     incl    => "${confdir}/spark-env.sh",
     changes => template('spark/spark-env.sh.augeas.erb'),

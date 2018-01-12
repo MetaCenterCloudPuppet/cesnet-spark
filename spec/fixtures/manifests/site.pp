@@ -1,6 +1,6 @@
 $realm = ''
 
-class{'hadoop':
+class { 'hadoop':
   realm => $realm,
 }
 

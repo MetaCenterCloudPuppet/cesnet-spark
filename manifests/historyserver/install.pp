@@ -11,17 +11,17 @@ class spark::historyserver::install {
   case $::osfamily {
     # Debian really fucked up design around postinstallation scripts
     'debian': {
-      exec {'debian-fuckup':
+      exec { 'debian-fuckup':
         command => 'echo "#! /bin/sh" > /etc/init.d/spark-history-server && chmod +x /etc/init.d/spark-history-server',
         path    => $path,
         creates => '/etc/init.d/spark-history-server',
       }
       ->
-      package{$spark::packages['historyserver']:
+      package { $spark::packages['historyserver']:
         ensure => installed,
       }
       ->
-      exec{'debian-restore-fuckup':
+      exec { 'debian-restore-fuckup':
         command => 'mv -v /etc/init.d/spark-history-server.dpkg-dist /etc/init.d/spark-history-server',
         path    => $path,
         onlyif  => 'test -f /etc/init.d/spark-history-server.dpkg-dist',
