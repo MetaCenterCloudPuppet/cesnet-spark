@@ -4,10 +4,15 @@
 #
 class spark (
   $alternatives           = '::default',
+  $confdir                = $spark::params::confdir,
+  $daemons                = $spark::params::daemons,
+  $defaultdir             = $spark::params::defaultdir,
   $hdfs_hostname          = undef,
   $master_hostname        = undef,
-  $master_port            = $params::master_port,
-  $master_ui_port         = $params::master_ui_port,
+  $master_port            = $spark::params::master_port,
+  $master_ui_port         = $spark::params::master_ui_port,
+  $hive_enable            = true,
+  $hive_configfile        = $spark::params::hive_configfile,
   $historyserver_hostname = undef,
   $historyserver_port     = $spark::params::historyserver_port,
   $keytab_historyserver   = $spark::params::keytab_historyserver,
