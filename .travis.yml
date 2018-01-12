@@ -8,10 +8,6 @@ rvm:
   - 2.1.0
 script: bundle exec rake test
 env:
-  - PUPPET_GEM_VERSION="~> 3.4.0"
-  - PUPPET_GEM_VERSION="~> 3.5.0" STRICT_VARIABLES=yes
-  - PUPPET_GEM_VERSION="~> 3.6.0" STRICT_VARIABLES=yes
-  - PUPPET_GEM_VERSION="~> 3.7.0" STRICT_VARIABLES=yes
-  - PUPPET_GEM_VERSION="~> 3.8.0" STRICT_VARIABLES=yes
-  # problem in tests with separated configure class:
-  #- PUPPET_GEM_VERSION="~> 3.7.0" STRICT_VARIABLES=yes FUTURE_PARSER=yes
+  - PUPPET_GEM_VERSION="~> 5.1.0"
+  - PUPPET_GEM_VERSION="~> 5.2.0"
+  - PUPPET_GEM_VERSION="~> 5.3.0"

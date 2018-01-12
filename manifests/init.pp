@@ -3,22 +3,23 @@
 # Main configuration class for CESNET Apache Spark puppet module.
 #
 class spark (
-  $alternatives = '::default',
-  $hdfs_hostname = undef,
-  $master_hostname = undef,
-  $master_port = $params::master_port,
-  $master_ui_port = $params::master_ui_port,
+  $alternatives           = '::default',
+  $hdfs_hostname          = undef,
+  $master_hostname        = undef,
+  $master_port            = $params::master_port,
+  $master_ui_port         = $params::master_ui_port,
   $historyserver_hostname = undef,
-  $historyserver_port = $params::historyserver_port,
-  $worker_port = $params::worker_port,
-  $worker_ui_port = $params::worker_ui_port,
-  $environment = undef,
-  $properties = undef,
-  $realm = undef,
-  $hive_enable = true,
-  $jar_enable = false,
-  $yarn_enable = true,
-) inherits ::spark::params {
+  $historyserver_port     = $spark::params::historyserver_port,
+  $keytab_historyserver   = $spark::params::keytab_historyserver,
+  $worker_port            = $spark::params::worker_port,
+  $worker_ui_port         = $spark::params::worker_ui_port,
+  $packages               = $spark::params::packages,
+  $environment            = undef,
+  $properties             = undef,
+  $realm                  = undef,
+  $jar_enable             = false,
+  $yarn_enable            = true,
+) inherits spark::params {
   include ::stdlib
 
   if $alternatives {
@@ -45,8 +46,8 @@ class spark (
   if $realm and $realm != '' {
     if $historyserver_hostname == $::fqdn {
       $security_properties = {
-        'spark.history.kerberos.enabled' => true,
-        'spark.history.kerberos.keytab' => '/etc/security/keytab/spark.service.keytab',
+        'spark.history.kerberos.enabled'   => true,
+        'spark.history.kerberos.keytab'    => '/etc/security/keytab/spark.service.keytab',
         'spark.history.kerberos.principal' => "spark/${::fqdn}@${realm}",
       }
     } else {

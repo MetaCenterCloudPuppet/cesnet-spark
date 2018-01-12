@@ -15,6 +15,7 @@ describe 'spark::master::config', :type => 'class' do
 end
 
 describe 'spark::master', :type => 'class' do
+  let(:pre_condition) { 'include spark::params include spark' }
   on_supported_os.each do |os,facts|
     context "on #{os}" do
       let(:facts) do

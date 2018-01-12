@@ -2,12 +2,12 @@ source ENV['GEM_SOURCE'] || "https://rubygems.org"
 
 group :test do
   gem "rake", '< 11'
-  gem "puppet", ENV['PUPPET_GEM_VERSION'] || '~> 3.8.0'
+  gem "puppet", ENV['PUPPET_GEM_VERSION'] || '~> 5.1.0'
   gem "rspec"
   gem "rspec-puppet"
+  gem "rspec-puppet-facts"
   gem "puppetlabs_spec_helper"
   gem "metadata-json-lint"
-  gem "rspec-puppet-facts"
   gem 'simplecov', '>= 0.11.0'
   gem 'simplecov-console'
 
