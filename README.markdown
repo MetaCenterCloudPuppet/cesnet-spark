@@ -309,6 +309,15 @@ Switches the alternatives used for the configuration. Default: 'cluster' (Debian
 
 It can be used only when supported (for example with Cloudera distribution).
 
+#####`defaultFS`
+
+Filesystem URI. Default: '::default' (from *$::hadoop::_defaultFS*).
+
+Examples:
+
+* *hdfs://hdfs.example.com:8020*
+* *hdfs://mycluster*
+
 #####`hdfs_hostname`
 
 HDFS hostname or defaultFS (for example: 'host:8020', 'haName', ...). Default: undef.

@@ -4,7 +4,7 @@
 #
 class spark (
   $alternatives = '::default',
-  $hdfs_hostname = undef,
+  $defaultFS = '::default',
   $master_hostname = undef,
   $master_port = $::spark::params::master_port,
   $master_ui_port = $::spark::params::master_ui_port,
@@ -25,8 +25,14 @@ class spark (
     validate_string($alternatives)
   }
   validate_bool($jar_enable)
-  if $jar_enable and !$hdfs_hostname {
-    warn('$hdfs_hostname parameter needed, when remote copied jar enabled')
+
+  if ($defaultFS == '::default') {
+    $_defaultFS = $::hadoop::_defaultFS
+  } else {
+    $_defaultFS = $defaultFS
+  }
+  if $jar_enable and !$_defaultFS {
+    warn('Hadoop defaultFS or defaultFS parameter needed, when remote copied jar enabled')
   }
 
   if $historyserver_hostname {

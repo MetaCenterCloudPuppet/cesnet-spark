@@ -1,8 +1,8 @@
-<% if @hdfs_hostname -%>
+<% if @defaultFS -%>
 spark.eventLog.enabled=true
-spark.eventLog.dir=hdfs://<%= @hdfs_hostname -%>/user/spark/applicationHistory
+spark.eventLog.dir=<%= @defaultFS -%>/user/spark/applicationHistory
 <% if @jar_enable -%>
-spark.yarn.jar=hdfs://<%= @hdfs_hostname -%>/user/spark/share/lib/spark-assembly.jar
+spark.yarn.jar=<%= @defaultFS -%>/user/spark/share/lib/spark-assembly.jar
 <% end -%>
 <% if @yarn_enable -%>
 spark.master=yarn
