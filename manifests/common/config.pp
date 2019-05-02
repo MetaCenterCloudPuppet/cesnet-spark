@@ -4,14 +4,14 @@
 #
 class spark::common::config {
   include ::stdlib
-  if $spark::yarn_enable or $spark::hdfs_hostname {
+  if $spark::yarn_enable or $hadoop::hdfs_hostname {
     contain hadoop::common::config
     contain hadoop::common::hdfs::config
   }
 
   ensure_packages($spark::packages['common'])
 
-  $hdfs_hostname = $spark::hdfs_hostname
+  $defaultFS = $spark::_defaultFS
   $historyserver_hostname = $spark::historyserver_hostname
   $master_hostname = $spark::master_hostname
   $master_port = $spark::master_port

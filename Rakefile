@@ -36,6 +36,8 @@ PuppetLint.configuration.fail_on_warnings = true
 PuppetLint.configuration.disable_relative_classname_inclusion
 # for bigger code chunks
 PuppetLint.configuration.disable_arrow_on_right_operand_line
+# for defaultFS
+PuppetLint.configuration.disable_variable_is_lowercase
 
 PuppetLint::RakeTask.new :lint do |config|
   config.ignore_paths = exclude_paths

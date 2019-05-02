@@ -14,7 +14,7 @@ class spark::frontend::config {
     include ::hadoop::common::yarn::config
   }
 
-  if $spark::hdfs_hostname or $spark::yarn_enable {
+  if $hadoop::hdfs_hostname or $spark::yarn_enable {
     $hadoop_confdir = $hadoop::confdir
     file {'/etc/profile.d/hadoop-spark.sh':
       owner   => 'root',

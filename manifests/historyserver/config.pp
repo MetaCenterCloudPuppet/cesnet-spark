@@ -5,8 +5,8 @@
 class spark::historyserver::config {
   contain spark::common::config
 
-  if $spark::hdfs_hostname == undef {
-    fail('hdfs_hostname required in cluster with Spark History Server')
+  if $spark::_defaultFS == undef {
+    fail('defaultFS required in cluster with Spark History Server')
   }
   if $spark::historyserver_hostname == undef {
     fail('historyserver_hostname required in cluster with Spark History Server')
