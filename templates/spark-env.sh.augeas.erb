@@ -13,7 +13,7 @@ set /files<%= @confdir -%>/spark-env.sh/<%= k -%>/export ""
 set /files<%= @confdir -%>/spark-env.sh/STANDALONE_SPARK_MASTER_HOST <%= @master_hostname %>
 set /files<%= @confdir -%>/spark-env.sh/STANDALONE_SPARK_MASTER_HOST/export ""
 <% else -%>
-set /files<%= @confdir -%>/spark-env.sh/STANDALONE_SPARK_MASTER_HOST `hostname`
+set /files<%= @confdir -%>/spark-env.sh/STANDALONE_SPARK_MASTER_HOST "`hostname -f`"
 set /files<%= @confdir -%>/spark-env.sh/STANDALONE_SPARK_MASTER_HOST/export ""
 <% end -%>
 
