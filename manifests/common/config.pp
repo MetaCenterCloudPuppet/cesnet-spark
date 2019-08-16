@@ -30,15 +30,6 @@ class spark::common::config {
     require => Package[$spark::packages['common']],
   }
 
-  file{"${spark::defaultdir}/spark":
-    owner   => 'root',
-    group   => 'root',
-    mode    => '0644',
-    content => template('spark/env.erb'),
-    alias   => 'spark-env',
-    require => Package[$spark::packages['common']],
-  }
-
   $confdir = $spark::confdir
   $environment = $spark::environment
   augeas{"${confdir}/spark-env.sh":

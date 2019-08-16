@@ -34,11 +34,6 @@ class spark::params {
     /Debian|RedHat/ => '/etc/spark/conf',
   }
 
-  $defaultdir = "${::osfamily}-${::operatingsystem}" ? {
-    /RedHat-Fedora/ => '/etc/sysconfig',
-    /Debian|RedHat/ => '/etc/default',
-  }
-
   $hive_configfile = "${::osfamily}-${::operatingsystem}" ? {
     /RedHat-Fedora/ => '../etc/hive/hive-site.xml',
     /Debian|RedHat/ => '../../hive/conf/hive-site.xml',
