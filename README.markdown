@@ -27,12 +27,6 @@
 
 This puppet module installs and setup Apache Spark cluster, optionally with security. YARN and Spark Master cluster modes are supported.
 
-Supported are:
-
-* **Debian 7/wheezy**: Cloudera distribution (tested with CDH 5.4.2/5.8.0, Spark 1.3.0/1.6.0)
-* **Ubuntu 14/trusty**: Cloudera distribution (tested with CDH 5.3.1, Spark 1.2.0)
-* **RHEL 6 and clones**: Cloudera distribution (tested with CDH 5.4.2, Spark 1.3.0)
-
 <a name="setup"></a>
 ## Setup
 

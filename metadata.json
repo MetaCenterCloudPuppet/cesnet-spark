@@ -1,6 +1,6 @@
 {
   "name": "cesnet-spark",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "author": "cesnet",
   "summary": "Apache Spark",
   "license": "MIT",
@@ -32,7 +32,7 @@
     {
       "operatingsystem": "Debian",
       "operatingsystemrelease": [
-        "7", "8"
+        "7", "8", "9", "10"
       ]
     },
     {
@@ -50,7 +50,7 @@
     {
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
-        "14.04", "16.04"
+        "14.04", "16.04", "18.04"
       ]
     }
   ],
