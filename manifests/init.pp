@@ -18,6 +18,8 @@ class spark (
   $hive_enable = true,
   $jar_enable = false,
   $yarn_enable = true,
+  $keytab = '/etc/security/keytab/spark.service.keytab',
+  $keytab_source = undef,
 ) inherits ::spark::params {
   if $jar_enable and !$hdfs_hostname {
     warn('$hdfs_hostname parameter needed, when remote copied jar enabled')
@@ -40,7 +42,7 @@ class spark (
     if $historyserver_hostname == $::fqdn {
       $security_properties = {
         'spark.history.kerberos.enabled' => true,
-        'spark.history.kerberos.keytab' => '/etc/security/keytab/spark.service.keytab',
+        'spark.history.kerberos.keytab' => $keytab,
         'spark.history.kerberos.principal' => "spark/${::fqdn}@${realm}",
       }
     } else {

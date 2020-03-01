@@ -315,6 +315,16 @@ HDFS hostname or defaultFS (for example: 'host:8020', 'haName', ...). Default: u
 
 Enables storing events to HSFS and makes *jar_enable* option available.
 
+#####`keytab`
+
+Spark Historyserver keytab file. Default: '/etc/security/keytab/spark.service.keytab'.
+
+#####`keytab_source`
+
+Puppet source for the Spark keytab file. Default: undef.
+
+When specified, the Spark keytab file is created using this puppet source(s). Otherwise only persmissions are set on the keytab file.
+
 #####`master_hostname`
 
 Spark Master hostname. Default: undef.

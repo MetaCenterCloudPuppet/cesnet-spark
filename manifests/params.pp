@@ -39,8 +39,6 @@ class spark::params {
     /Debian|RedHat/ => '../../hive/conf/hive-site.xml',
   }
 
-  $keytab_historyserver = '/etc/security/keytab/spark.service.keytab'
-
   $master_port = '7077'
   $master_ui_port = '18080'
   $worker_port = '7078'
