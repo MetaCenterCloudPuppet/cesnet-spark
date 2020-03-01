@@ -309,11 +309,19 @@ Switches the alternatives used for the configuration. Default: 'cluster' (Debian
 
 It can be used only when supported (for example with Cloudera distribution).
 
+#####`confdir`
+
+Spark config directory. Default: platform specific ('/etc/spark/conf' or '/etc/spark').
+
 #####`hdfs_hostname`
 
 HDFS hostname or defaultFS (for example: 'host:8020', 'haName', ...). Default: undef.
 
 Enables storing events to HSFS and makes *jar_enable* option available.
+
+#####`hive_configfile`
+
+Hive config file. Default: platform specific ('../../hive/conf/hive-site.xml' or '../etc/hive/hive-site.xml').
 
 #####`keytab`
 
