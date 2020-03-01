@@ -4,8 +4,11 @@ fixtures:
       repo: "https://github.com/puppetlabs/puppetlabs-stdlib"
       # for future parser tests with puppet < 4
       ref: "4.25.1"
-    alternatives: "git://github.com/puppet-community/puppet-alternatives"
-    hadoop: "git://github.com/MetaCenterCloudPuppet/cesnet-hadoop"
-    hadoop_lib: "git://github.com/MetaCenterCloudPuppet/cesnet-hadoop_lib"
+    alternatives:
+      repo: "https://github.com/puppet-community/puppet-alternatives"
+      # ruby 1.9.3 compatibility
+      ref: "v3.0.0"
+    hadoop: "https://github.com/MetaCenterCloudPuppet/cesnet-hadoop"
+    hadoop_lib: "https://github.com/MetaCenterCloudPuppet/cesnet-hadoop_lib"
   symlinks:
     spark: "#{source_dir}"
