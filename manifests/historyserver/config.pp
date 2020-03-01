@@ -12,13 +12,23 @@ class spark::historyserver::config {
     fail('historyserver_hostname required in cluster with Spark History Server')
   }
 
-  $keytab = $spark::keytab_historyserver
+  $keytab = $spark::keytab
   if $spark::realm and $spark::realm != '' {
-    file { $keytab:
-      owner => 'spark',
-      group => 'spark',
-      mode  => '0400',
-      alias => 'spark.service.keytab',
+    if ($::spark::keytab_source) {
+      file { $keytab:
+        owner  => 'spark',
+        group  => 'spark',
+        mode   => '0400',
+        alias  => 'spark.service.keytab',
+        source => $::spark::keytab_source,
+      }
+    } else {
+      file { $keytab:
+        owner => 'spark',
+        group => 'spark',
+        mode  => '0400',
+        alias => 'spark.service.keytab',
+      }
     }
   }
 }
