@@ -108,7 +108,7 @@ For simplicity one-machine Hadoop cluster is used (everything is on *$::fqdn*, r
     }
 
     class{'spark':
-      hdfs_hostname => $::fqdn,
+	  # defaultFS is taken from hadoop class
     }
 
     node default {
@@ -153,7 +153,6 @@ Two-nodes cluster is used here.
 
     class{'spark':
       master_hostname        => $master_hostname,
-      hdfs_hostname          => $master_hostname,
       historyserver_hostname => $master_hostname,
       yarn_enable            => false,
     }
@@ -188,7 +187,6 @@ The *spark-assembly.jar* file is copied into HDFS on each job submit. It is poss
     ...
 
     class{'spark':
-      hdfs_hostname => $::fqdn,
       jar_enable    => true,
     }
 
@@ -321,12 +319,6 @@ Examples:
 
 * *hdfs://hdfs.example.com:8020*
 * *hdfs://mycluster*
-
-#####`hdfs_hostname`
-
-HDFS hostname or defaultFS (for example: 'host:8020', 'haName', ...). Default: undef.
-
-Enables storing events to HSFS and makes *jar_enable* option available.
 
 #####`hive_configfile`
 

@@ -9,3 +9,7 @@ See https://github.com/MetaCenterCloudPuppet/cesnet-spark/commits/master.
 * **environments** parameter:
  * name changed: environments -> environment
  * type remains hash
+
+2.0.0:
+
+* removed **hdfs_hostname** parameter (replaced by **spark::defaultFS** and **hadoop::_defaultFS*)
