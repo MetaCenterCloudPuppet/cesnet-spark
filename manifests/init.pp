@@ -18,6 +18,8 @@ class spark (
   $hive_enable = true,
   $jar_enable = false,
   $yarn_enable = true,
+  $confdif = $::spark::params::confdir,
+  $hive_configfile = $::spark::params::hive_configfile,
   $keytab = '/etc/security/keytab/spark.service.keytab',
   $keytab_source = undef,
 ) inherits ::spark::params {
