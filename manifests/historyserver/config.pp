@@ -3,11 +3,8 @@
 # This class is called from spark::historyserver.
 #
 class spark::historyserver::config {
-  include ::stdlib
   contain spark::common::config
 
-  validate_string($spark::_defaultFS)
-  validate_string($spark::historyserver_hostname)
   if $spark::_defaultFS == undef {
     fail('defaultFS required in cluster with Spark History Server')
   }

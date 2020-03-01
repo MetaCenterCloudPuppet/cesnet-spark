@@ -19,13 +19,6 @@ class spark (
   $jar_enable = false,
   $yarn_enable = true,
 ) inherits ::spark::params {
-  include ::stdlib
-
-  if $alternatives {
-    validate_string($alternatives)
-  }
-  validate_bool($jar_enable)
-
   if ($defaultFS == '::default') {
     $_defaultFS = $::hadoop::_defaultFS
   } else {
