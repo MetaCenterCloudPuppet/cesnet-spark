@@ -22,7 +22,6 @@ class spark::common::config {
     group   => 'root',
     mode    => '0644',
     content => template('spark/spark-defaults.conf.erb'),
-    alias   => 'spark-defaults.conf',
     require => Package[$spark::packages['common']],
   }
 

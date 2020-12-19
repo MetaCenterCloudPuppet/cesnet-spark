@@ -6,6 +6,6 @@ class spark::master::service {
   service { $spark::daemons['master']:
     ensure    => 'running',
     enable    => true,
-    subscribe => File['spark-defaults.conf'],
+    subscribe => File["${spark::confdir}/spark-defaults.conf"],
   }
 }

@@ -6,6 +6,6 @@ class spark::historyserver::service {
   service { $spark::daemons['historyserver']:
     ensure    => 'running',
     enable    => true,
-    subscribe => File['spark-defaults.conf'],
+    subscribe => File["${spark::confdir}/spark-defaults.conf"],
   }
 }
