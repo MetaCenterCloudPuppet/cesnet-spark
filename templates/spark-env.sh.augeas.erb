@@ -40,9 +40,6 @@ set /files<%= @confdir -%>/spark-env.sh/SPARK_WORKER_WEBUI_PORT/export ''
 set /files<%= @confdir -%>/spark-env.sh/SPARK_CONF_DIR /etc/spark/conf
 set /files<%= @confdir -%>/spark-env.sh/SPARK_CONF_DIR/export ''
 
-set /files<%= @confdir -%>/spark-env.sh/SPARK_HISTORY_SERVER_LOG_DIR hdfs:///user/spark/applicationHistory
-set /files<%= @confdir -%>/spark-env.sh/SPARK_HISTORY_SERVER_LOG_DIR/export ''
-
 <% if scope.lookupvar('spark::historyserver_hostname') == @fqdn -%>
 <% properties = scope.lookupvar('spark::_properties') -%>
 <%# sort the properties list for ruby <= 1.8 #-%>
@@ -60,5 +57,5 @@ set /files<%= @confdir -%>/spark-env.sh/SPARK_HISTORY_SERVER_LOG_DIR/export ''
 <% end -%>
 <% end -%>
 <% end -%>
-set /files<%= @confdir -%>/spark-env.sh/SPARK_HISTORY_OPTS '"$SPARK_HISTORY_OPTS -Dspark.history.fs.logDirectory=${SPARK_HISTORY_SERVER_LOG_DIR}<%= s -%>"'
+set /files<%= @confdir -%>/spark-env.sh/SPARK_HISTORY_OPTS '"$SPARK_HISTORY_OPTS -Dspark.history.fs.logDirectory=hdfs:///user/spark/applicationHistory<%= s -%>"'
 set /files<%= @confdir -%>/spark-env.sh/SPARK_HISTORY_OPTS/export ''
