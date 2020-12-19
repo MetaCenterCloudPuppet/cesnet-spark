@@ -5,6 +5,7 @@
 class spark (
   $alternatives = '::default',
   $defaultFS = '::default',
+  $logdir = '/user/spark/applicationHistory',
   $master_hostname = undef,
   $master_port = $::spark::params::master_port,
   $master_ui_port = $::spark::params::master_ui_port,
@@ -32,11 +33,42 @@ class spark (
     warn('Hadoop defaultFS or defaultFS parameter needed, when remote copied jar enabled')
   }
 
+  if $_defaultFS and $_defaultFS != '' {
+    $event_properties = {
+      'spark.eventLog.enabled' => 'true',
+      'spark.eventLog.dir' => "${_defaultFS}${logdir}",
+    }
+  } else {
+    $event_properties = {}
+  }
+  if $jar_enable {
+    $jar_properties = {
+      'spark.yarn.jar' => "${_defaultFS}/user/spark/share/lib/spark-assembly.jar",
+    }
+  } else {
+    $jar_properties = {}
+  }
+  if $yarn_enable {
+    $master_properties = {
+      'spark.master' => 'yarn',
+    }
+  } else {
+    if $master_hostname and $master_hostname != '' {
+      $master_properties = {
+        'spark.master' => "spark://${master_hostname}:${master_port}",
+      }
+    } else {
+      $master_properties = {}
+    }
+  }
   if $historyserver_hostname {
     $hs_properties = {
       # must be with 'http://' to proper redirection from Hadoop with security
       'spark.yarn.historyServer.address' => "http://${historyserver_hostname}:${historyserver_port}",
+      'spark.history.fs.logDirectory' => $logdir,
     }
+  } else {
+    $hs_properties = {}
   }
   if $historyserver_hostname == $::fqdn {
     $hs_daemon_properties = {
@@ -59,5 +91,5 @@ class spark (
     $security_properties = {}
   }
 
-  $_properties = merge($hs_properties, $hs_daemon_properties, $security_properties, $properties)
+  $_properties = merge($event_properties, $jar_properties, $master_properties, $hs_properties, $hs_daemon_properties, $security_properties, $properties)
 }

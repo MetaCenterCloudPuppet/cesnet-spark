@@ -11,15 +11,11 @@ class spark::common::config {
 
   ensure_packages($spark::packages['common'])
 
-  $defaultFS = $spark::_defaultFS
-  $historyserver_hostname = $spark::historyserver_hostname
   $master_hostname = $spark::master_hostname
   $master_port = $spark::master_port
   $master_ui_port = $spark::master_ui_port
   $worker_port = $spark::worker_port
   $worker_ui_port = $spark::worker_ui_port
-  $jar_enable = $spark::jar_enable
-  $yarn_enable = $spark::yarn_enable
 
   file{"${spark::confdir}/spark-defaults.conf":
     owner   => 'root',

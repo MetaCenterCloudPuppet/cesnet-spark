@@ -334,6 +334,12 @@ Puppet source for the Spark keytab file. Default: undef.
 
 When specified, the Spark keytab file is created using this puppet source(s). Otherwise only persmissions are set on the keytab file.
 
+#####`logdir`
+
+Event log directory and history server log directory without the defaultFS prefix. Default: '/user/spark/applicationHistory'.
+
+Note, this is parameter is ignored by *spark::hdfs* class. When using non=default value, this directory must be explicitly created.
+
 #####`master_hostname`
 
 Spark Master hostname. Default: undef.

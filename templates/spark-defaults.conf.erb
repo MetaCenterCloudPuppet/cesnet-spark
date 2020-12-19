@@ -1,17 +1,3 @@
-<% if @defaultFS -%>
-spark.eventLog.enabled=true
-spark.eventLog.dir=<%= @defaultFS -%>/user/spark/applicationHistory
-<% if @jar_enable -%>
-spark.yarn.jar=<%= @defaultFS -%>/user/spark/share/lib/spark-assembly.jar
-<% end -%>
-<% if @yarn_enable -%>
-spark.master=yarn
-<% elsif @master_hostname -%>
-spark.master=spark://<%= @master_hostname -%>:<%= @master_port %>
-<% end -%>
-<% else -%>
-spark.master=spark://<%= @master_hostname -%>:<%= @master_port %>
-<% end -%>
 <% properties = scope.lookupvar('spark::_properties') -%>
 <%# sort the properties list for ruby <= 1.8 #-%>
 <% rv=RUBY_VERSION.split('.') -%>

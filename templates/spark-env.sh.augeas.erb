@@ -57,5 +57,5 @@ set /files<%= @confdir -%>/spark-env.sh/SPARK_CONF_DIR/export ''
 <% end -%>
 <% end -%>
 <% end -%>
-set /files<%= @confdir -%>/spark-env.sh/SPARK_HISTORY_OPTS '"$SPARK_HISTORY_OPTS -Dspark.history.fs.logDirectory=hdfs:///user/spark/applicationHistory<%= s -%>"'
+set /files<%= @confdir -%>/spark-env.sh/SPARK_HISTORY_OPTS '"$SPARK_HISTORY_OPTS<%= s -%>"'
 set /files<%= @confdir -%>/spark-env.sh/SPARK_HISTORY_OPTS/export ''
